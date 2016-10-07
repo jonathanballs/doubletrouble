@@ -3,13 +3,14 @@ var Player = require('./player')
 
 class Game {
     
-    constructor() {
+    constructor(challenger) {
         console.log("New game");
-        players = {
-            left: new Player('leftplayer','p1'),
-            right: new Player('leftplayer','p2')
-        }
+        this.challenger = challenger
         console.log(this)
+    }
+
+    addOpponent(opponent) {
+        this.opponent = opponent
     }
 }
 
