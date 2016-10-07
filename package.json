@@ -1,0 +1,19 @@
+{
+  "name": "doubletrouble",
+  "version": "1.0.0",
+  "description": "2 player multiscreen game",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bonniejools/doubletrouble.git"
+  },
+  "author": "Pedro Santos Mendonca, Jonathan Balls",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bonniejools/doubletrouble/issues"
+  },
+  "homepage": "https://github.com/bonniejools/doubletrouble#readme"
+}
