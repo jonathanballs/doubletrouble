@@ -10,9 +10,13 @@ class Game {
         console.log(this)
     }
 
-    setOpponent(opponent) {
-        this.opponent = opponent
+    setPlayerLeft(playerLeft) {
+        this.playerLeft = playerLeft
     }
+    setPlayerRight(playerRight) {
+        this.playerRight = playerRight
+    }
+
 }
 
 module.exports = Game;
