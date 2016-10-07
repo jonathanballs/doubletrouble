@@ -14,12 +14,12 @@ var gameport        = process.env.PORT || 4004,
     players         = [],
     games           = []; // No players playing no games
 
-// Process command line arguments;
-process.argv.forEach(function (val, index, array) {
-    if (val == "-noZombies") {
-        createZombies = false;
-    }
-});
+var playerLeft          = new Player('left') 
+var playerRight         = new Player('right') 
+playerRight.spawnUnit(0)
+playerRight.spawnUnit(1)
+playerLeft.spawnUnit(0)
+playerLeft.spawnUnit(1)
 
 
 // Start server.
