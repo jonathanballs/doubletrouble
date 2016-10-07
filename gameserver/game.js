@@ -3,13 +3,14 @@ var Player = require('./player')
 
 class Game {
     
-    constructor(challenger) {
+    constructor(id, challenger) {
         console.log("New game");
+        this.id = id
         this.challenger = challenger
         console.log(this)
     }
 
-    addOpponent(opponent) {
+    setOpponent(opponent) {
         this.opponent = opponent
     }
 }
