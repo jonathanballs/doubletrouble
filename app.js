@@ -16,6 +16,10 @@ var gameport        = process.env.PORT || 4004,
 
 var playerLeft          = new Player('left') 
 var playerRight         = new Player('right') 
+playerRight.spawnUnit(0)
+playerRight.spawnUnit(1)
+playerLeft.spawnUnit(0)
+playerLeft.spawnUnit(1)
 
 
 // Start server.
