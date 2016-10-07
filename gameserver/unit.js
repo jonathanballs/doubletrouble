@@ -3,9 +3,11 @@
 class Unit {
 
     constructor() {
-        console.log("New Unit")
-        this.progress = 0
-        console.log(this)
+        this.progress = this.START
+    }
+
+    move(delta) {
+        this.progress = this.progress + SPEED
     }
 }
 
