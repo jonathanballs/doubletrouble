@@ -1,4 +1,7 @@
 "use strict"
+var lane = require('./lane')
+
+var NUM_LANES = 2
 
 class Player {
     

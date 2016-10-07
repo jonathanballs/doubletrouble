@@ -11,15 +11,14 @@ var gameport        = process.env.PORT || 4004,
     verbose         = false,
     update_delta    = 30, //ms
     ids_given       = 0,
-    players         = [],
     games           = []; // No players playing no games
 
-// Process command line arguments;
-process.argv.forEach(function (val, index, array) {
-    if (val == "-noZombies") {
-        createZombies = false;
-    }
-});
+var playerLeft          = new Player('left') 
+var playerRight         = new Player('right') 
+playerRight.spawnUnit(0)
+playerRight.spawnUnit(1)
+playerLeft.spawnUnit(0)
+playerLeft.spawnUnit(1)
 
 
 // Start server.
@@ -40,10 +39,48 @@ app.get('/static/*', function(req, res, next) {
 });
 
 
+function getGameByCode(gameCode) {
+    games.forEach(function(game) {
+        if (game.code == gameCode) {
+            return game;
+        }
+    });
+    return null;
+}
+
+function generateGameCode() {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    for( var i=0; i < 5; i++ ) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    // If the game code is already in use then generate a new one
+    if (getGameByCode(text)) {
+        text = generateGameCode();
+    }
+    return text;
+}
+
+
 // Client connection algo
 io.on('connection', function(socket) {
     socket.userid = ids_given++;
-    socket.score = 0;
+
+    // User requests to join a game
+    socket.on('createGame', function(data) {
+        var gameCode = generateGameCode();
+        var player = new Player(data.playerName, socket.user_id);
+        var game = new Game(gameCode, player);
+        games.push(game);
+    });
+
+    // Player requests to join a game
+    socket.on('joinGame', function(data) {
+        var player = new Player(data.playerName, socket.user_id);
+        var game = getGameByCode(data.gameCode);
+        game.setOpponent(player);
+        socket.player = player;
+    });
 
     // Assign them a unique ID.
     socket.emit( 'userid', { id: socket.userid } );
@@ -51,14 +88,7 @@ io.on('connection', function(socket) {
 
     // Handle the user disconnecting.
     socket.on('disconnect', function() {
-        var num_users = collect_userstates().length;
-        if (!num_users && zombies.length) {
-            zombies = [];
-            console.log('No users present. Deleting all zombies');
-        }
-
         console.log('Player ' + socket.userid + ' disconnected');
     });
 });
-
 
