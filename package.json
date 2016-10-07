@@ -2,7 +2,11 @@
   "name": "doubletrouble",
   "version": "1.0.0",
   "description": "2 player multiscreen game",
-  "main": "index.js",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.13.4",
+    "socket.io": "^1.4.5"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
