@@ -3,7 +3,7 @@
 console.log("basically running");
 
 
-var port            = process.env.PORT || 4004,
+var gameport        = process.env.PORT || 4004,
     app             = require('express')(),
     server          = require('http').Server(app),
     io              = require('socket.io')(server),
