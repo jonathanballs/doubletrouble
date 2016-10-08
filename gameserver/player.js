@@ -7,6 +7,7 @@ class Player {
     getState() {
         return {
             gameId: this.gameId,
+            side: this.side,
             name: this.name,
             health: this.health,
             income: this.income,
@@ -15,9 +16,10 @@ class Player {
         }
     }
 
-    constructor(gameId, name, id, socket) {
+    constructor(gameId, name, id, socket, side) {
         this.gameId = gameId
         this.name = name
+        this.side = side
         this.id = id
         this.socket = socket
         this.health = 100
