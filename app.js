@@ -98,17 +98,18 @@ io.on('connection', function(socket) {
 
     // Player requests to join a game
     socket.on('joinGame', function(data) {
-        var player = new Player(data.gameCode, data.playerName, socket.user_id);
         var game = gameManager.getGame(data.gameCode);
+        console.log(game);
         if (game == null) {
             socket.emit("gameJoin", {game: null});
         }
         else {
+            var player = new Player(data.gameCode, data.playerName, socket.user_id);
             game.setPlayerRight(player);
             socket.player = player;
             console.log("Player joined");
             console.log(game);
-            //socket.emit("gameJoin", {game: game});
+            socket.emit("gameJoin", {game: game});
         }
     });
 
