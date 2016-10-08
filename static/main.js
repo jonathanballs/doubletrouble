@@ -240,7 +240,7 @@ function gameLoop()
         } });
     //update Money counter
     hud[1].text = "Moneyz:";
-    if(player == 0){ hud[1].text += gamestate.playerLeft.money;}
+    if(player == 0){ hud[1].text += Math.floor(gamestate.playerLeft.money);}
     else{hud[1].text += gamestate.playerRight.money;}
 
     draw();
@@ -251,11 +251,9 @@ function spawn(pos,unit)
     var spawns = ['worker', 'soldier', 'wizard'];
     if (pos == 0)
     {
-        //units.push(makeSprite(spawn_pos[0],spawn_pos[1], 'units/'+spawns[unit]+ (player + 1)));
     }
     else
     {
-        //units.push(makeSprite(spawn_pos[2],spawn_pos[3], 'units/'+spawns[unit]+ (player + 1)));
     }
     socket.emit('spawn', { lane:pos, type:spawns[unit]});
 }
@@ -279,16 +277,16 @@ function draw()
             {
                 if(player == 0)
                 {
-                units.push(makeSprite(spawn_pos[0]+500+(window.innerWidth*(unit.progress / 100 )-spawn_pos[0]),spawn_pos[1],"units/"+ unit.type +(player+1)));
+                units.push(makeSprite(spawn_pos[0]+((window.innerWidth)*(unit.progress / 100 )),spawn_pos[1],"units/"+ unit.type +(player+1)));
                 }else{
-                units.push(makeSprite(spawn_pos[0]-(spawn_pos[0]*(unit.progress / 100 )),spawn_pos[1],"units/soldier1"));
+                units.push(makeSprite(spawn_pos[0]-(spawn_pos[0]*(unit.progress / 100 )),spawn_pos[1],"units/"+unit.type + (player+1)));
                 }
             });
     opLanes[0].units.forEach(function(unit)
             {
                 if(player == 0)
                 {
-                    units.push(makeSprite(window.innerWidth-(window.innerWidth-spawn_pos[0])*(unit.progress/100),spawn_pos[1],"units/"+ unit.type +oPlayer));
+                    units.push(makeSprite(window.innerWidth-((window.innerWidth - spawn_pos[0])*unit.progress/100),spawn_pos[1],"units/"+ unit.type +oPlayer));
                 }else{
                     units.push(makeSprite(spawn_pos[0]*(unit.progress/100),spawn_pos[1],"units/"+ unit.type +oPlayer));
                     
