@@ -267,9 +267,18 @@ function draw()
     }else{
         var lanes = gamestate.playerRight.lanes;
     }
+    units.forEach(function(unit) {
+            units.splice(units.indexOf(unit),1);
+            stage.removeChild(unit);
+            })
     lanes[0].units.forEach(function(unit)
             {
-                units.push(makeSprite(spawn_pos[0],spawn_pos[1],"units/"+unit.type +(player+1)));
+                if(player == 0)
+                {
+                units.push(makeSprite(spawn_pos[0]+(window.innerWidth*(unit.progress / 100 )),spawn_pos[1],"units/soldier1"));
+                }else{
+                units.push(makeSprite(spawn_pos[0]-(spawn_pos[0]*(unit.progress / 100 )),spawn_pos[1],"units/soldier1"));
+                }
             });
 
 }
