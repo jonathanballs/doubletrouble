@@ -18,19 +18,23 @@
     <!-- CREATE GAME -->
     <div class="formControl" id="createGameForm" style="display: none">
         <button class="backButton" onclick="showJoinCreateForm()"><img src="/static/splash/back.png"/></button>
-        <label>Name</label>
-        <input autofocus type="text" class="formControl" name="createGameName">
-        <button onclick="createNewGame()"  class="gameButton" type="button">Create Game</button>
+        <form onsubmit="return createNewGame()">
+            <label>Name</label>
+            <input autofocus type="text" class="formControl" name="createGameName">
+            <button class="gameButton" type="submit">Create Game</button>
+        </form>
     </div>
 
     <!-- JOIN GAME -->
     <div class="formControl" id="joinGameForm" style="display: none">
         <button class="backButton" onclick="showJoinCreateForm()"><img src="/static/splash/back.png"/></button>
-        <label>Name</label>
-        <input autofocus type="text" class="formControl" name="joinGameName">
-        <label>Game Code</label>
-        <input type="text" class="formControl" name="joinGameCode" style="text-transform:uppercase">
-        <button onclick="joinGame()"  class="gameButton" type="button">Join Game</button>
+        <form onsubmit="return joinGame()">
+            <label>Name</label>
+            <input autofocus type="text" class="formControl" name="joinGameName">
+            <label>Game Code</label>
+            <input type="text" class="formControl" name="joinGameCode" style="text-transform:uppercase">
+            <button class="gameButton" type="submit">Join Game</button>
+        </form>
     </div>
 
     <!-- GAME CODE -->

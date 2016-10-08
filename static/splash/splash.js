@@ -14,7 +14,9 @@ function createNewGame() {
     var name = document.getElementsByName("createGameName")[0].value;
     console.log("Creating new game with name " + name);
     socket.emit("createGame", {playerName: name});
+    return false;
 }
+
 socket.on("newGameCode", function(data) {
     console.log("Received game code " + data);
     document.getElementById("joinGameForm").style.display = "none";
@@ -29,6 +31,7 @@ function joinGame() {
     console.log("Joining game with name " + name + " and code " + gameCode);
     socket.emit("joinGame", {playerName: name, gameCode: gameCode});
     isHost = 1;
+    return false;
 }
 
 socket.on("gameJoin", function(data) {
