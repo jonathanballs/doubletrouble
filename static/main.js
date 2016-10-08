@@ -240,8 +240,8 @@ function gameLoop()
         } });
     //update Money counter
     hud[1].text = "Moneyz:";
-    if(player == 0){ hud[1].text += gamestate.playerLeft.money;}
-    else{hud[1].text += gamestate.playerRight.money;}
+    if(player == 0){ hud[1].text += Math.floor(gamestate.playerLeft.money);}
+    else{hud[1].text += Math.floor(gamestate.playerRight.money);}
 
     draw();
 
