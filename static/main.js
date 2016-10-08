@@ -134,6 +134,7 @@ class Hud {
             stage.addChild(button.sprite);
             stage.addChild(button.text);
             stage.addChild(button.price);
+            stage.addChild(button.coin);
         });
     }
 
@@ -158,17 +159,22 @@ class Hud {
         button.alpha = 0.35;
 
         // Create sprite
-        var buttonSprite = makeSprite(buttonStartX, 70+(148*this.buttons.length), 'units/'+ unitName + (playerSide +1));
+        var buttonSprite = makeSprite(buttonStartX, buttonStartY-5, 'units/'+ unitName + (playerSide +1));
 
         // Create shorcut key text
-        var shortcutText = new PIXI.Text(shortcutKey, {font:"20px sans-serif", fill:"black"});
+        var shortcutText = new PIXI.Text(shortcutKey, {font:"20px sans-serif", fill:"grey"});
         shortcutText.position.set(buttonStartX+buttonPadding, buttonStartY+buttonPadding);
 
         // Create price
-        var priceText = new PIXI.Text(unitPrice, {font:"20px sans-serif", fill:"black"});
-        priceText.position.set(buttonStartX+buttonPadding, buttonStartY+buttonHeight-buttonPadding-priceText.height);
+        var priceText = new PIXI.Text(unitPrice, {font:"20px sans-serif", fill:"grey"});
+        var coinIcon = makeSprite(0, 0, "coin");
+        coinIcon.position.set(buttonStartX+buttonPadding,
+                buttonStartY+buttonHeight-buttonPadding-priceText.height);
+        coinIcon.width = priceText.height; // Slightly smaller
+        coinIcon.height = priceText.height;
+        priceText.position.set(coinIcon.position.x+coinIcon.width+5, coinIcon.position.y);
 
-        this.buttons.push({btn: button, sprite: buttonSprite, text: shortcutText, price: priceText});
+        this.buttons.push({btn: button, sprite: buttonSprite, text: shortcutText, coin: coinIcon, price: priceText});
     }
 }
 
