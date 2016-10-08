@@ -3,11 +3,11 @@ var Unit = require('./unit')
 
 class Knight extends Unit {
 
-    getUnitTypeSpeed() { return 9 }
-    getUnitTypeDamage() { return 2 }
+    getUnitTypeSpeed() { return global.CONF.KNIGHT_SPEED }
+    getUnitTypeDamage() { return global.CONF.KNIGHT_DAMAGE }
     getUnitTypeMovingStatus() { return true }
-    getUnitTypeStart() { return 3 }
-    getUnitTypeCost() { return 7 }
+    getUnitTypeStart() { return global.CONF.KNIGHT_START }
+    getUnitTypeCost() { return global.CONF.KNIGHT_COST }
 }
 
 module.exports = Knight

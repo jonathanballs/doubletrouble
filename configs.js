@@ -1,0 +1,13 @@
+module.exports = {
+    NUM_LANES: 2,
+    PLAYER_INCOME: 1,
+    PLAYER_START_MONEY: 3,
+    KNIGHT_SPEED: 9,
+    KNIGHT_DAMAGE: 2,
+    KNIGHT_START: 3,
+    KNIGHT_COST: 7,
+    PEASANT_SPEED: 5,
+    PEASANT_DAMAGE: 1,
+    PEASANT_START: 0,
+    PEASANT_COST: 3
+}

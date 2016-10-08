@@ -9,9 +9,9 @@ class Player {
         this.name = name
         this.id = id
         this.health = 100
-        this.income = 1 
-        this.money = 5
-        this.lanes = Array(process.env.NUM_LANES).fill().map((_, i) => {
+        this.income = global.CONF.PLAYER_INCOME 
+        this.money = global.CONF.PLAYER_START_MONEY
+        this.lanes = Array(global.CONF.NUM_LANES).fill().map((_, i) => {
             return new lane(i)
         })
     }

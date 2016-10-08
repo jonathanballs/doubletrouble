@@ -3,11 +3,11 @@ var Unit = require('./unit')
 
 class Peasant extends Unit {
 
-    getUnitTypeSpeed() { return 5 }
-    getUnitTypeDamage() { return 1 }
+    getUnitTypeSpeed() { return global.CONF.PEASANT_SPEED }
+    getUnitTypeDamage() { return global.CONF.PEASANT_DAMAGE }
     getUnitTypeMovingStatus() { return true }
-    getUnitTypeStart() { return 0 }
-    getUnitTypeCost() { return 3 }
+    getUnitTypeStart() { return global.CONF.PEASANT_START }
+    getUnitTypeCost() { return global.CONF.PEASANT_COST }
 }
 
 module.exports = Peasant
