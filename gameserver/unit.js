@@ -5,10 +5,11 @@ class Unit {
     constructor() {
         this.progress = this.getUnitTypeStart()
         this.speed = this.getUnitTypeSpeed()
+        this.moving = this.getUnitTypeMovingStatus()
     }
 
     move(delta) {
-        this.progress += this.speed
+        if (this.moving) { this.progress += this.speed }
     }
 }
 
