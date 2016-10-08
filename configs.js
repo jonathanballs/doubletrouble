@@ -1,4 +1,5 @@
 module.exports = {
+    TICKS_PER_SECOND: 30,
     NUM_LANES: 2,
     PLAYER_INCOME: 1,
     PLAYER_START_MONEY: 3,

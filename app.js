@@ -1,6 +1,7 @@
 "use strict";
 
-require('dotenv').config();
+global.CONF = require('./configs')
+console.log(global.CONF)
 console.log("Double Trouble v0.0.1 running");
 
 var gameport        = process.env.PORT || 4004,
@@ -14,6 +15,54 @@ var gameport        = process.env.PORT || 4004,
     ids_given       = 0,
     games           = []; // No players playing no games
 
+var colors = require('colors/safe');
+function printGameStatus(game){
+    console.log(colors.green('=============================='))
+    console.dir(game)
+    console.log(colors.green('=============================='))
+}
+// testing the game
+var testGame = new Game('testGameId')
+testGame.setPlayerLeft(new Player(testGame, 'player1','p1id'))
+testGame.setPlayerRight(new Player(testGame, 'player2','p2id'))
+testGame.playerLeft.spawnUnit(0,'peasant')
+testGame.playerRight.spawnUnit(0,'knight')
+printGameStatus(testGame.playerLeft.lanes[0])
+printGameStatus(testGame.playerRight.lanes[0])
+testGame.tick()
+testGame.tick()
+testGame.tick()
+testGame.tick()
+testGame.tick()
+printGameStatus(testGame)
+printGameStatus(testGame.playerLeft.lanes[0])
+printGameStatus(testGame.playerRight.lanes[0])
+testGame.tick()
+testGame.tick()
+testGame.tick()
+testGame.tick()
+testGame.tick()
+printGameStatus(testGame)
+testGame.playerLeft.spawnUnit(0,'knight')
+testGame.playerRight.spawnUnit(0,'peasant')
+printGameStatus(testGame.playerLeft.lanes[0])
+printGameStatus(testGame.playerRight.lanes[0])
+testGame.tick()
+testGame.tick()
+testGame.tick()
+testGame.tick()
+testGame.tick()
+printGameStatus(testGame)
+printGameStatus(testGame.playerLeft.lanes[0])
+printGameStatus(testGame.playerRight.lanes[0])
+testGame.tick()
+testGame.tick()
+testGame.tick()
+testGame.tick()
+testGame.tick()
+printGameStatus(testGame)
+printGameStatus(testGame.playerLeft.lanes[0])
+printGameStatus(testGame.playerRight.lanes[0])
 
 // Start server.
 server.listen(gameport);
