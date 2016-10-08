@@ -42,6 +42,16 @@ img.logo {
     box-sizing: border-box;
 }
 
+p.gameCodeShower {
+    color: #dddddd;
+    text-align: center;
+}
+p.gameCode {
+    font-size: 3em;
+    color: #dddddd;
+    text-align: center;
+}
+
 button.backButton {
     width: 70px;
     padding-left: 0em;

@@ -111,10 +111,13 @@ io.on('connection', function(socket) {
 
     // User requests to join a game
     socket.on('createGame', function(data) {
-        var game = new Game(generateGameCode());
+        var gameCode = generateGameCode();
+        var game = new Game(gameCode);
         var player = new Player(game, data.playerName, socket.user_id);
         game.setPlayerLeft(player);
         games.push(game);
+        console.log("sending gameCode");
+        socket.emit('newGameCode', gameCode);
     });
 
     // Player requests to join a game
