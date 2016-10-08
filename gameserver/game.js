@@ -28,9 +28,9 @@ class Game {
     getState() {
         var obj = {
             id: this.id,
-            playerLeft: this.playerLeft.getState(),
-            playerRight: this.playerRight.getState(),
         }
+        if (this.playerLeft) Object.assign(obj, { playerLeft: this.playerLeft.getState() })
+        if (this.playerRight) Object.assign(obj, { playerRight: this.playerRight.getState() })
         return obj;
     }
 
