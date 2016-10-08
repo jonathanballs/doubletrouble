@@ -11,7 +11,7 @@ class Player {
         this.name = name
         this.id = id
         this.health = 100
-        this.income = 1
+        this.income = 0.2 
         this.money = 5
         this.lanes = Array(NUM_LANES).fill().map((_, i) => {
             return new lane(i)
@@ -20,7 +20,9 @@ class Player {
 
     spawnUnit(lane, type) {
         var unit = new units[type]()
-        if (unit.getUnitTypeCost() <= this.money) {
+        var unitCost = unit.getUnitTypeCost()
+        if (unitCost <= this.money) {
+            this.money -= unitCost
             this.lanes[lane].addUnit(new units[type]())
         }
     }
