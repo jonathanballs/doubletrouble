@@ -261,6 +261,17 @@ function spawn(pos,unit)
 }
 function draw()
 {
+    if(player == 0)
+    {
+        var lanes = gamestate.playerLeft.lanes;
+    }else{
+        var lanes = gamestate.playerRight.lanes;
+    }
+    lanes[0].units.forEach(function(unit)
+            {
+                units.push(makeSprite(spawn_pos[0],spawn_pos[1],"units/"+unit.type +(player+1)));
+            });
+
 }
 function keyboard(keyCode) {
   var key = {};
