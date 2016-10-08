@@ -2,10 +2,36 @@
 <meta charset="utf-8">
 <head>
     <link rel="stylesheet" href="static/style.css"/>
+    <link rel="stylesheet" href="static/splash/splash.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <script src="/static/splash/splash.js"></script>
 </head>
-<title>Hello World</title>
- <body style="overflow:hidden;margin:0px;">
-    <script src="static/pixi.min.js"></script>
-    <script src="static/main.js"></script>
+<title>Double Trouble</title>
+<body style="overflow:hidden;margin:0px;">
+<div style="width:100%; height: 100%">
+    <img class="logo" src="/static/splash/logo.png" />
+
+    <div class="formControl" id="joinOrCreateForm">
+        <button onclick="showNewGameForm()"  class="gameButton" type="button">Create Game</button>
+        <button onclick="showJoinGameForm()" class="gameButton" type="button">Join Game</button>
+    </div>
+
+    <!-- CREATE GAME -->
+    <div class="formControl" id="createGameForm" style="display: none">
+        <label>Name</label>
+        <input autofocus type="text" class="formControl" name="createGameName">
+        <button onclick="createNewGame()"  class="gameButton" type="button">Create Game</button>
+    </div>
+
+    <!-- JOIN GAME -->
+    <div class="formControl" id="joinGameForm" style="display: none">
+        <label>Name</label>
+        <input autofocus type="text" class="formControl" name="joinGameName">
+        <label>Game Code</label>
+        <input type="text" class="formControl" name="joinGameCode" style="text-transform:uppercase">
+        <button onclick="joinGame()"  class="gameButton" type="button">Join Game</button>
+    </div>
+</div>
+    <!--<script src="static/pixi.min.js"></script>
+    <script src="static/main.js"></script>-->
 </body>
