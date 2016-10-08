@@ -4,7 +4,6 @@
     <link rel="stylesheet" href="static/style.css"/>
     <link rel="stylesheet" href="static/splash/splash.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <script src="/static/splash/splash.js"></script>
 </head>
 <title>Double Trouble</title>
 <body style="overflow:hidden;margin:0px;">
@@ -33,7 +32,15 @@
         <input type="text" class="formControl" name="joinGameCode" style="text-transform:uppercase">
         <button onclick="joinGame()"  class="gameButton" type="button">Join Game</button>
     </div>
+
+    <!-- GAME CODE -->
+    <div class="formControl" id="createGameCode" style="display: none">
+        <p class="gameCodeShower">Your game code is<p class="gameCode" id="gameCode">ABCEQ</p></p>
+    </div>
 </div>
-    <!--<script src="static/pixi.min.js"></script>
-    <script src="static/main.js"></script>-->
+    <script src="static/socket.io-1.4.5.js"></script>
+    <script>var socket = io(); </script>
+    <script src="/static/splash/splash.js"></script>
+    <script src="static/pixi.min.js"></script>
+    <script src="static/main.js"></script>
 </body>
