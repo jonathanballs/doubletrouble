@@ -12,10 +12,10 @@ var gameport        = process.env.PORT || 4004,
     GameManager     = require('./gameserver/manager.js'),
     Game            = require('./gameserver/game.js'),
     Player          = require('./gameserver/player.js'),
+    gameManager     = new GameManager(),
     verbose         = false,
     update_delta    = 30, //ms
-    ids_given       = 0,
-    games           = []; // No players playing no games
+    ids_given       = 0;
 
 function printGameStatus(game){
     console.log(colors.green('=============================='))
@@ -47,7 +47,7 @@ function test() {
         testGame.playerRight.spawnUnit(0,'soldier')
     });
 }
-test();
+//test();
 
 // Start server.
 server.listen(gameport);
@@ -67,12 +67,6 @@ app.get('/static/*', function(req, res, next) {
 });
 
 
-function getGameByCode(gameCode) {
-    gameCode = gameCode.toUpperCase();
-    console.log(games);
-    return _.find(games, (game) => { return game.id == gameCode });
-}
-
 function generateGameCode() {
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -80,7 +74,7 @@ function generateGameCode() {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
     }
     // If the game code is already in use then generate a new one
-    if (getGameByCode(text)) {
+    if (gameManager.getGame(text)) {
         text = generateGameCode();
     }
     return text;
@@ -95,17 +89,17 @@ io.on('connection', function(socket) {
     socket.on('createGame', function(data) {
         var gameCode = generateGameCode();
         var game = new Game(gameCode);
-        var player = new Player(game, data.playerName, socket.user_id);
+        var player = new Player(game.id, data.playerName, socket.user_id);
         game.setPlayerLeft(player);
-        games.push(game);
+        gameManager.addGame(game);
         console.log("sending gameCode " + gameCode);
         socket.emit('newGameCode', gameCode);
     });
 
     // Player requests to join a game
     socket.on('joinGame', function(data) {
-        var player = new Player(game, data.playerName, socket.user_id);
-        var game = getGameByCode(data.gameCode);
+        var player = new Player(data.gameCode, data.playerName, socket.user_id);
+        var game = gameManager.getGame(data.gameCode);
         if (game == null) {
             socket.emit("gameJoin", {game: null});
         }
@@ -129,7 +123,8 @@ io.on('connection', function(socket) {
 
     // update gamestate periodically
     function updateGameState(socket) {
-        socket.emit('gamestate', { gamestate: socket.player.game } )
+        if (this.player)
+            socket.emit('gamestate', { gamestate: gameManager.getGame(socket.player.gameId) } )
     }
     setInterval(updateGameState, 1000 / 5, socket)
 
