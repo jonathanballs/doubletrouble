@@ -6,7 +6,6 @@ module.exports = class Manager {
         console.log("Game Running")
         this.games = new Array()
         this.active = true
-        console.log(this.games)
     }
 
     tick(self) {

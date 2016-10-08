@@ -5,13 +5,13 @@ var gamestate;
 var units = new Array();
 var spawn_pos = new Array();
 var hud = new Array();
-var buttons = new Array();
 var renderer = PIXI.autoDetectRenderer(window.innerWidth,window.innerHeight, {antialias:false, transparent:false, resolution:1});
 var stage = new PIXI.Container();
-//start(0);
-function start(input)
+
+// Call this to start the game
+function start(pside)
 {
-    playerSide = input;
+    playerSide = pside;
     var bodyRef = document.body;
     bodyRef.innerHTML = "";
     document.body.appendChild(renderer.view);
@@ -71,10 +71,11 @@ function setup()
     //make castle and assign the initial x
     makeRoads(init);    
     makeHuts(init);
-    makeHud(); 
-    makeButtons();
-
-    buttons.forEach(function(item){stage.addChild(item)});
+    hud = new Hud();
+    hud.addUnitButton("worker", "Q");
+    hud.addUnitButton("soldier", "W");
+    hud.addUnitButton("wizard", "E");
+    hud.paint();
 
     //render
     renderer.render(stage);
@@ -97,54 +98,69 @@ function setup()
     };
     gameLoop();
 }
-function makeHud()
-{
-    if(playerSide == 0)
-    {
-        hud[1] = new PIXI.Text("Moneyz:1000", {font:"20px sans-serif", fill:"black"});
-        hud[1].position.set(20,20);
-        hud[0] = new PIXI.Graphics();
-        hud[0].beginFill("0xdddddd");
-        hud[0].drawRect(0,0,168, window.innerHeight);
-        hud[0].endFill();
-        hud[0].alpha = 0.4;
-        hud.forEach(function(item){stage.addChild(item)});
-    }else{
-        hud[1] = new PIXI.Text("Moneyz:1000", {font:"20px sans-serif", fill:"black"});
-        hud[1].position.set(window.innerWidth -hud[1].width - 20,20);
-        hud[0] = new PIXI.Graphics();
-        hud[0].beginFill("0xdddddd");
-        hud[0].drawRect(window.innerWidth - (168),0,168, window.innerHeight);
-        hud[0].endFill();
-        hud[0].alpha = 0.4;
-        hud.forEach(function(item){stage.addChild(item)});
+
+class Hud {
+
+    constructor() {
+        this.hudPadding = 20;
+        this.hudWidth = 168; // 128 + padding
+        this.hudStartX = playerSide ? window.innerWidth - this.hudWidth : 0;
+
+        // Background
+        var bg = new PIXI.Graphics();
+        bg.beginFill("0xdddddd");
+        bg.drawRect(this.hudStartX, 0, this.hudWidth, window.innerHeight);
+        bg.endFill();
+        bg.alpha = 0.4; // slight transparency
+        this.background = bg;
+
+        // Money counter
+        this.moneyCounter = new PIXI.Text("Moneyz: 1000", {font:"20px sans-serif", fill:"black"});
+        this.moneyCounter.position.set(this.hudStartX + this.hudPadding, this.hudPadding);
+
+        // Buttons
+        this.buttons = new Array();
     }
-    
-}
-function makeButtons()
-{
-    makeButton("worker");
-    makeButton("soldier");
-    makeButton("wizard");
-}
-function makeButton(sprite)
-{
-    var bts = ['Q','W','E','R','T']
-    var xDef = 20;
-    if(playerSide == 1)
-    {
-        xDef = window.innerWidth - 148;
+
+    paint() {
+        [this.background, this.moneyCounter].forEach(function(item){stage.addChild(item)});
+        this.buttons.forEach(function(button) {
+            stage.addChild(button.btn);
+            stage.addChild(button.sprite);
+            stage.addChild(button.text);
+        });
     }
-    var buttonCount = (buttons.length)/3; 
-    buttons.push(new PIXI.Graphics());
-    buttons[buttons.length -1].beginFill("0xdddddd");
-    buttons[buttons.length -1].drawRect(xDef,70 +(148*buttonCount),128,128);
-    buttons[buttons.length -1].endFill();
-    buttons[buttons.length -1].alpha = 0.35;
-    buttons.push(makeSprite(xDef, 70+(148*buttonCount), 'units/'+ sprite + (playerSide +1)));
-    buttons.push(new PIXI.Text(bts[buttonCount], {font:"30px sans-serif", fill:"black"}));
-    buttons[buttons.length -1].position.set(xDef+15,85+(148*buttonCount));
+
+    update() {
+        this.moneyCounter.text = "Moneyz: " + Math.floor(player.money);
+    }
+
+    addUnitButton(unitName, shortcutKey) {
+
+        var buttonWidth = 128;
+        var buttonHeight = 128;
+
+        var buttonStartX = this.hudStartX + this.hudPadding;
+        var buttonStartY = this.moneyCounter.position.y + this.moneyCounter.height + this.hudPadding + (this.buttons.length * (buttonHeight + this.hudPadding));
+
+        // Create button
+        var button = new PIXI.Graphics();
+        button.beginFill("0xdddddd");
+        button.drawRect(buttonStartX, buttonStartY,128,128);
+        button.endFill();
+        button.alpha = 0.35;
+
+        // Create sprite
+        var buttonSprite = makeSprite(buttonStartX, 70+(148*this.buttons.length), 'units/'+ unitName + (playerSide +1));
+
+        // Create shorcut key text
+        var shortcutText = new PIXI.Text(shortcutKey, {font:"30px sans-serif", fill:"black"});
+        shortcutText.position.set(buttonStartX+15,85+(148*this.buttons.length));
+
+        this.buttons.push({btn: button, sprite: buttonSprite, text: shortcutText});
+    }
 }
+
 function makeSprite(x, y, sprite)
 {
     var tmp = new PIXI.Sprite(PIXI.loader.resources["static/assets/main/"+sprite+".png"].texture);
@@ -241,9 +257,7 @@ function gameLoop()
             console.log("unit destroyed in order to free memory");
         } });
     //update Money counter
-    hud[1].text = "Moneyz:";
-    if(playerSide == 0){ hud[1].text += Math.floor(gamestate.playerLeft.money);}
-    else{hud[1].text += Math.floor(gamestate.playerRight.money);}
+    hud.update()
 
     draw();
 
@@ -367,7 +381,7 @@ function keyboard(keyCode) {
 //     //make castle and assign the initial x
 //     makeRoads(init);    
 //     makeHuts(init);
-//     // makeHud(); 
+//     // (); 
 //     // makeButtons();
 
 //     buttons.forEach(function(item){stage.addChild(item)});
