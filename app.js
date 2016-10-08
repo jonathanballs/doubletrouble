@@ -24,28 +24,28 @@ function printGameStatus(game){
 }
 
 function test() {
-// testing the game
-var testGameManager = new GameManager()
-var testGame = new Game('testGameId')
-testGameManager.play()
-testGameManager.addGame(testGame)
-testGame.setPlayerLeft(new Player(testGame, 'player1','p1id'))
-testGame.setPlayerRight(new Player(testGame, 'player2','p2id'))
-function sleep (time) {
-    return new Promise((resolve) => setTimeout(resolve, time));
-}
-sleep(1000).then(() => {
-    testGame.playerLeft.spawnUnit(0,'worker')
-});
-sleep(2000).then(() => {
-    testGame.playerRight.spawnUnit(0,'worker')
-});
-sleep(8000).then(() => {
-    testGame.playerRight.spawnUnit(0,'soldier')
-});
-sleep(5000).then(() => {
-    testGame.playerRight.spawnUnit(0,'soldier')
-});
+    // testing the game
+    var testGameManager = new GameManager()
+    var testGame = new Game('testGameId')
+    testGameManager.play()
+    testGameManager.addGame(testGame)
+    testGame.setPlayerLeft(new Player(testGame, 'player1','p1id'))
+    testGame.setPlayerRight(new Player(testGame, 'player2','p2id'))
+    function sleep (time) {
+        return new Promise((resolve) => setTimeout(resolve, time));
+    }
+    sleep(1000).then(() => {
+        testGame.playerLeft.spawnUnit(0,'worker')
+    });
+    sleep(2000).then(() => {
+        testGame.playerRight.spawnUnit(0,'worker')
+    });
+    sleep(8000).then(() => {
+        testGame.playerRight.spawnUnit(0,'soldier')
+    });
+    sleep(5000).then(() => {
+        testGame.playerRight.spawnUnit(0,'soldier')
+    });
 }
 test();
 
@@ -126,5 +126,12 @@ io.on('connection', function(socket) {
     socket.on('disconnect', function() {
         console.log('Player ' + socket.userid + ' disconnected');
     });
+
+    // update gamestate periodically
+    function updateGameState(socket) {
+        socket.emit('gamestate', { gamestate: socket.player.game } )
+    }
+    setInterval(updateGameState, 1000 / 5, socket)
+
 });
 
