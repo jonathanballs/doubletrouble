@@ -17,12 +17,13 @@ class Player {
     }
 
     spawnUnit(lane, type) {
+        console.log('SPAWNING ' + type)
         var unit = new units[type]()
         var unitCost = unit.getUnitTypeCost()
         if (unitCost <= this.money) {
             this.money -= unitCost
             this.lanes[lane].addUnit(new units[type]())
-        }
+         } else { console.log('insufficient funds') }
     }
 
     takeDamage(damage) {

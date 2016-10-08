@@ -33,8 +33,8 @@ class Game {
     }
     players() {
         var players_arr = []
-        if (this.PlayerLeft) { players_arr.push(this.playerLeft) }
-        if (this.PlayerRight) { players_arr.push(this.playerRight) }
+        if (this.playerLeft) { players_arr.push(this.playerLeft) }
+        if (this.playerRight) { players_arr.push(this.playerRight) }
         return players_arr
     }
 
