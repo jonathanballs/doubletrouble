@@ -72,9 +72,9 @@ function setup()
     makeRoads(init);    
     makeHuts(init);
     hud = new Hud();
-    hud.addUnitButton("worker", "Q");
-    hud.addUnitButton("soldier", "W");
-    hud.addUnitButton("wizard", "E");
+    hud.addUnitButton("worker", "Q", 15);
+    hud.addUnitButton("soldier", "W", 27);
+    hud.addUnitButton("wizard", "E", 50);
     hud.paint();
 
     //render
@@ -135,7 +135,7 @@ class Hud {
         this.moneyCounter.text = "Moneyz: " + Math.floor(player.money);
     }
 
-    addUnitButton(unitName, shortcutKey) {
+    addUnitButton(unitName, shortcutKey, unitPrice) {
 
         var buttonWidth = 128;
         var buttonHeight = 128;
@@ -155,7 +155,7 @@ class Hud {
 
         // Create shorcut key text
         var shortcutText = new PIXI.Text(shortcutKey, {font:"30px sans-serif", fill:"black"});
-        shortcutText.position.set(buttonStartX+15,85+(148*this.buttons.length));
+        shortcutText.position.set(buttonStartX+15,buttonStartY+15);
 
         this.buttons.push({btn: button, sprite: buttonSprite, text: shortcutText});
     }
