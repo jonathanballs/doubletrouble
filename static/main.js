@@ -7,39 +7,39 @@ var hud = new Array();
 var buttons = new Array();
 var renderer = PIXI.autoDetectRenderer(window.innerWidth,window.innerHeight, {antialias:false, transparent:false, resolution:1});
 var stage = new PIXI.Container();
-//start();
+// start(0);
 function start(input)
 {
-player = input;
-var bodyRef = document.body;
-bodyRef.innerHTML = "";
-document.body.appendChild(renderer.view);
-//loading assets
-PIXI.loader
-    .add("static/assets/main/grass.png")
-    .add("static/assets/main/blTile.png")
-    .add("static/assets/main/brTile.png")
-    .add("static/assets/main/lrTile.png")
-    .add("static/assets/main/ltTile.png")
-    .add("static/assets/main/lbTile.png")
-    .add("static/assets/main/lSplit.png")
-    .add("static/assets/main/rSplit.png")
-    .add("static/assets/main/tbTile.png")
-    .add("static/assets/main/trTile.png")
-    .add("static/assets/main/castle1.png")
-    .add("static/assets/main/castle2.png")
-    .add("static/assets/main/house.png")
-    .add("static/assets/main/units/soldier1.png")
-    .add("static/assets/main/units/soldier2.png")
-    .add("static/assets/main/units/wizard1.png")
-    .add("static/assets/main/units/wizard2.png")
-    .add("static/assets/main/units/worker1.png")
-    .add("static/assets/main/units/worker2.png")
-    .add("static/assets/main/details/detail1.png")
-    .add("static/assets/main/details/detail2.png")
-    .add("static/assets/main/details/detail3.png")
-    .add("static/assets/main/details/detail4.png")
-    .load(setup);
+    player = input;
+    var bodyRef = document.body;
+    bodyRef.innerHTML = "";
+    document.body.appendChild(renderer.view);
+    //loading assets
+    PIXI.loader
+        .add("static/assets/main/grass.png")
+        .add("static/assets/main/blTile.png")
+        .add("static/assets/main/brTile.png")
+        .add("static/assets/main/lrTile.png")
+        .add("static/assets/main/ltTile.png")
+        .add("static/assets/main/lbTile.png")
+        .add("static/assets/main/lSplit.png")
+        .add("static/assets/main/rSplit.png")
+        .add("static/assets/main/tbTile.png")
+        .add("static/assets/main/trTile.png")
+        .add("static/assets/main/castle1.png")
+        .add("static/assets/main/castle2.png")
+        .add("static/assets/main/house.png")
+        .add("static/assets/main/units/soldier1.png")
+        .add("static/assets/main/units/soldier2.png")
+        .add("static/assets/main/units/wizard1.png")
+        .add("static/assets/main/units/wizard2.png")
+        .add("static/assets/main/units/worker1.png")
+        .add("static/assets/main/units/worker2.png")
+        .add("static/assets/main/details/detail1.png")
+        .add("static/assets/main/details/detail2.png")
+        .add("static/assets/main/details/detail3.png")
+        .add("static/assets/main/details/detail4.png")
+        .load(setup);
 }
 
 function setup()
@@ -102,7 +102,7 @@ function makeHud()
         hud[1].position.set(20,20);
         hud[0] = new PIXI.Graphics();
         hud[0].beginFill("0xdddddd");
-        hud[0].drawRect(0,0,window.innerWidth * 0.18, window.innerHeight);
+        hud[0].drawRect(0,0,168, window.innerHeight);
         hud[0].endFill();
         hud[0].alpha = 0.4;
         hud.forEach(function(item){stage.addChild(item)});
@@ -111,40 +111,36 @@ function makeHud()
         hud[1].position.set(window.innerWidth -hud[1].width - 20,20);
         hud[0] = new PIXI.Graphics();
         hud[0].beginFill("0xdddddd");
-        hud[0].drawRect(window.innerWidth - (window.innerWidth * 0.18),window.innerWidth * 0.18, window.innerHeight);
+        hud[0].drawRect(window.innerWidth - (168),0,168, window.innerHeight);
         hud[0].endFill();
         hud[0].alpha = 0.4;
         hud.forEach(function(item){stage.addChild(item)});
-
     }
     
 }
 function makeButtons()
 {
-    buttons[2] = new PIXI.Text("Q", {font:"30px sans-serif", fill:"black"});
-    buttons[2].position.set(35,85);
-    buttons[1] = makeSprite(20, 70, 'units/worker' + (player +1));
-    buttons[0] = new PIXI.Graphics();
-    buttons[0].beginFill("0xdddddd");
-    buttons[0].drawRect(20,70,128,128);
-    buttons[0].endFill();
-    buttons[0].alpha = 0.35;
-    buttons[5] = new PIXI.Text("W", {font:"30px sans-serif", fill:"black"});
-    buttons[5].position.set(35,223);
-    buttons[4] = makeSprite(20, 208, 'units/soldier' + (player +1));
-    buttons[3] = new PIXI.Graphics();
-    buttons[3].beginFill("0xdddddd");
-    buttons[3].drawRect(20,208,128,128);
-    buttons[3].endFill();
-    buttons[3].alpha = 0.35;
-    buttons[8] = new PIXI.Text("E", {font:"30px sans-serif", fill:"black"});
-    buttons[8].position.set(35,356);
-    buttons[7] = makeSprite(20, 346, 'units/wizard' + (player +1));
-    buttons[6] = new PIXI.Graphics();
-    buttons[6].beginFill("0xdddddd");
-    buttons[6].drawRect(20,346,128,128);
-    buttons[6].endFill();
-    buttons[6].alpha = 0.35;
+    makeButton("worker");
+    makeButton("soldier");
+    makeButton("wizard");
+}
+function makeButton(sprite)
+{
+    var bts = ['Q','W','E','R','T']
+    var xDef = 20;
+    if(player == 1)
+    {
+        xDef = window.innerWidth - 148;
+    }
+    var buttonCount = (buttons.length)/3; 
+    buttons.push(new PIXI.Graphics());
+    buttons[buttons.length -1].beginFill("0xdddddd");
+    buttons[buttons.length -1].drawRect(xDef,70 +(148*buttonCount),128,128);
+    buttons[buttons.length -1].endFill();
+    buttons[buttons.length -1].alpha = 0.35;
+    buttons.push(makeSprite(xDef, 70+(148*buttonCount), 'units/'+ sprite + (player +1)));
+    buttons.push(new PIXI.Text(bts[buttonCount], {font:"30px sans-serif", fill:"black"}));
+    buttons[buttons.length -1].position.set(xDef+15,85+(148*buttonCount));
 }
 function makeSprite(x, y, sprite)
 {
