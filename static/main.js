@@ -8,10 +8,11 @@ var hud = new Array();
 var buttons = new Array();
 var renderer = PIXI.autoDetectRenderer(window.innerWidth,window.innerHeight, {antialias:false, transparent:false, resolution:1});
 var stage = new PIXI.Container();
-//start(0);
-function start(input)
+
+// Call this to start the game
+function start(pside)
 {
-    playerSide = input;
+    playerSide = pside;
     var bodyRef = document.body;
     bodyRef.innerHTML = "";
     document.body.appendChild(renderer.view);
@@ -71,7 +72,7 @@ function setup()
     //make castle and assign the initial x
     makeRoads(init);    
     makeHuts(init);
-    makeHud(); 
+    new Hud();
     makeButtons();
 
     buttons.forEach(function(item){stage.addChild(item)});
@@ -97,30 +98,28 @@ function setup()
     };
     gameLoop();
 }
-function makeHud()
-{
-    if(playerSide == 0)
-    {
-        hud[1] = new PIXI.Text("Moneyz:1000", {font:"20px sans-serif", fill:"black"});
-        hud[1].position.set(20,20);
+
+class Hud {
+    constructor() {
+        var hudPadding = 20;
+        var hudWidth = 168; // 128 + padding
+        var hudStartY = playerSide ? 0 : window.innerWidth - hudWidth;
+
+        // Background
         hud[0] = new PIXI.Graphics();
         hud[0].beginFill("0xdddddd");
-        hud[0].drawRect(0,0,168, window.innerHeight);
+        hud[0].drawRect(0, 0, hudWidth, window.innerHeight);
         hud[0].endFill();
-        hud[0].alpha = 0.4;
-        hud.forEach(function(item){stage.addChild(item)});
-    }else{
-        hud[1] = new PIXI.Text("Moneyz:1000", {font:"20px sans-serif", fill:"black"});
-        hud[1].position.set(window.innerWidth -hud[1].width - 20,20);
-        hud[0] = new PIXI.Graphics();
-        hud[0].beginFill("0xdddddd");
-        hud[0].drawRect(window.innerWidth - (168),0,168, window.innerHeight);
-        hud[0].endFill();
-        hud[0].alpha = 0.4;
+        hud[0].alpha = 0.4; // slight transparency
+
+        // Money counter
+        hud[1] = new PIXI.Text("Moneyz: 1000", {font:"20px sans-serif", fill:"black"});
+        hud[1].position.set(hudStartY, hudPadding);
+
         hud.forEach(function(item){stage.addChild(item)});
     }
-    
 }
+
 function makeButtons()
 {
     makeButton("worker");
@@ -348,7 +347,7 @@ function keyboard(keyCode) {
 //     //make castle and assign the initial x
 //     makeRoads(init);    
 //     makeHuts(init);
-//     // makeHud(); 
+//     // new Hud(); 
 //     // makeButtons();
 
 //     buttons.forEach(function(item){stage.addChild(item)});
