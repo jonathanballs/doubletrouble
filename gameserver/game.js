@@ -33,12 +33,12 @@ var detectHouseCollisions = function(lanes){
         var l1 = lanes[0]
         var l2 = lanes[1]
         // compute combined progress to detect collision (current progress + speed)
-        if (u1.progress + u1.speed >= global.CONF.LENGTH_LANES) {
+        if (u1.progress + u1.speed/global.CONF.TICKS_PER_SECOND >= global.CONF.LENGTH_LANES) {
             u1.moving = false
             u1.progress = 100
             calculateDamages(u1,l2)
         }
-        if (u2.progress + u2.speed >= global.CONF.LENGTH_LANES) {
+        if (u2.progress + u2.speed/global.CONF.TICKS_PER_SECOND >= global.CONF.LENGTH_LANES) {
             u2.moving = false
             u2.progress = 100
             calculateDamages(u2,l1)
