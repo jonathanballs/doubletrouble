@@ -86,15 +86,15 @@ function setup()
     // var keyR = keyboard(82);
     keyQ.press = function() {
         console.log("train Worker");
-        spawn(0,0);
+        spawn(1,0);
     };
     keyW.press = function() {
         console.log("train soldier");
-        spawn(0,1);
+        spawn(1,1);
     };
     keyE.press = function() {
         console.log("train wizard");
-        spawn(0,2);
+        spawn(1,2);
     };
     gameLoop();
 }
@@ -325,6 +325,46 @@ function draw()
                     {
                         console.log(unit.x);
                         units.push(makeSprite((ends[1])*((unit.progress-50)/50),spawn_pos[1]+64,"units/"+ unit.type +oPlayer));
+                        units[units.length-1].anchor.set(0.5,0.5);
+                    }
+                }
+            })
+    lanes[1].units.forEach(function(unit)
+            {
+                var ends = [renderer.width,spawn_pos[0]];
+                if(playerSide == 0)
+                {
+                    var spawn = [spawn_pos[0]+64,renderer.width];
+                    if(unit.progress < 50)
+                    {
+                        units.push(makeSprite(spawn[0] + (ends[0]-spawn[0])*(unit.progress/50),spawn_pos[3]+64,"units/"+ unit.type +(playerSide+1)));
+                        units[units.length-1].anchor.set(0.5,0.5);
+                    }
+                }else{
+                    var spawn = [spawn_pos[0],renderer.width];
+                    if(unit.progress <50)
+                    {
+                        units.push(makeSprite(spawn[0]-(spawn[0])*(unit.progress / 50),spawn_pos[3]+64,"units/" + unit.type + (playerSide+1)));
+                        units[units.length-1].anchor.set(0.5,0.5);
+                    }
+                }
+            });
+    opLanes[1].units.forEach(function(unit)
+            {
+                var spawn = [spawn_pos[0]+128,renderer.width];
+                var ends = [renderer.width,spawn_pos[0]];
+                if(playerSide == 0)
+                {
+                    if(unit.progress > 50)
+                    {
+                        units.push(makeSprite(spawn[1] - (spawn[1]-ends[1])*((unit.progress - 50)/50),spawn_pos[3]+64,"units/"+ unit.type +oPlayer));
+                        units[units.length-1].anchor.set(0.5,0.5);
+                    }
+                }else{
+                    if(unit.progress > 50)
+                    {
+                        console.log(unit.x);
+                        units.push(makeSprite((ends[1])*((unit.progress-50)/50),spawn_pos[3]+64,"units/"+ unit.type +oPlayer));
                         units[units.length-1].anchor.set(0.5,0.5);
                     }
                 }
