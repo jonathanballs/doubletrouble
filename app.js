@@ -1,5 +1,6 @@
 "use strict";
 
+require('dotenv').config();
 console.log("Double Trouble v0.0.1 running");
 
 var gameport        = process.env.PORT || 4004,
