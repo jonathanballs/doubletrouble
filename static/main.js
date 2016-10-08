@@ -1,11 +1,11 @@
 //setup
-var bodyRef = document.body;
 var player = 0;
 var renderer = PIXI.autoDetectRenderer(window.innerWidth,window.innerHeight, {antialias:false, transparent:false, resolution:1});
-document.body.appendChild(renderer.view);
-
 var stage = new PIXI.Container();
-
+function start()
+{
+var bodyRef = document.body;
+document.body.appendChild(renderer.view);
 PIXI.loader
     .add("static/assets/main/grass.png")
     .add("static/assets/main/blTile.png")
@@ -21,6 +21,7 @@ PIXI.loader
     .add("static/assets/main/castle2.png")
     .add("static/assets/main/house.png")
     .load(setup);
+}
 
 function setup()
 {
