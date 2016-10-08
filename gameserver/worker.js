@@ -8,6 +8,7 @@ class Worker extends Unit {
     getUnitTypeMovingStatus() { return true }
     getUnitTypeStart() { return global.CONF.WORKER_START }
     getUnitTypeCost() { return global.CONF.WORKER_COST }
+    getUnitType() { return 'worker' }
 }
 
 module.exports = Worker

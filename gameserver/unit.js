@@ -6,6 +6,7 @@ class Unit {
         this.progress = this.getUnitTypeStart()
         this.speed = this.getUnitTypeSpeed()
         this.moving = this.getUnitTypeMovingStatus()
+        this.type = this.getUnitType()
     }
 
     move(delta) {
