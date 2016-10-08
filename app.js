@@ -64,8 +64,6 @@ io.on('connection', function(socket) {
         socket.player = player
         game.setPlayerLeft(player);
         gameManager.addGame(game);
-        console.log(game);
-        console.log(gameManager.getGame(game.id));
         console.log("sending gameCode " + gameCode);
         socket.emit('newGameCode', gameCode);
     });
@@ -73,7 +71,6 @@ io.on('connection', function(socket) {
     // Player requests to join a game
     socket.on('joinGame', function(data) {
         var game = gameManager.getGame(data.gameCode);
-        console.log(game);
         if (game == null) {
             socket.emit("gameJoin", {game: null});
         }
@@ -108,7 +105,14 @@ io.on('connection', function(socket) {
 
     // update gamestate periodically
     function updateGameState(socket) {
-        if (socket.player) socket.emit('gamestate', { gamestate: gameManager.getGame(socket.player.getState().gameId).getState() } )
+        if (socket.player) {
+            var game = gameManager.getGame(socket.player.getState().gameId)
+            console.log(game)
+            if (!game.active) { 
+                console.log(game.loser_side + ' loses')
+                socket.emit('gameend', { winner: game.winner_side }) 
+            } else { socket.emit('gamestate', { gamestate: game.getState() } ) }
+        }
     }
     setInterval(updateGameState, 1000 / global.CONF.STATE_UPDATES_PER_SECOND, socket)
 

@@ -43,8 +43,6 @@ var detectHouseCollisions = function(lanes){
             u2.progress = 100
             calculateDamages(u2,l1)
         }
-        console.log(l1)
-        console.log(l2)
     } 
 }
 
@@ -79,15 +77,19 @@ class Game {
 
     // this part handles interaction with the game
     tick() {
+        if (!this.active) return
+        var self = this
         var players = this.players()
         if (players.length != 2) { return }
         players.forEach((player) => {
             player.lanes.forEach((lane, i) => {
+                console.log(player.side + ': ' + lane.health) 
                 detectUnitCollisions([players[0].lanes[i],players[1].lanes[i]])
                 detectHouseCollisions([players[0].lanes[i],players[1].lanes[i]])
                 lane.killUnits()
+                self.loser_side = player.side
                 if (lane.health <= 0) {
-                    lane.active = false
+                    this.active = false
                     // kill the person here
                 }
             })

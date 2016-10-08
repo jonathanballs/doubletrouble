@@ -3,7 +3,7 @@ module.exports = {
     TICKS_PER_SECOND: 60,
     LENGTH_LANES: 100,
     NUM_LANES: 2,
-    PLAYER_INCOME: 3,
+    PLAYER_INCOME: 5,
     PLAYER_START_MONEY: 3,
     SOLDIER_SPEED: 5,
     SOLDIER_DAMAGE: 2,
