@@ -53,7 +53,8 @@ class Player {
     }
 
     getPaid() {
-        this.money += this.income
+        // income per second using ticks per second
+        this.money += this.income / global.CONF.TICKS_PER_SECOND
     }
 }
 

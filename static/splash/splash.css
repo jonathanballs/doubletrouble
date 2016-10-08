@@ -16,7 +16,7 @@ img.logo {
     position: relative;
 }
 
-.formControl > *{
+.formControl button, input, label {
     display: block;
     margin:auto;
     height: 70px;
@@ -27,7 +27,7 @@ img.logo {
     width: 100%;
 }
 
-.formControl > button {
+.formControl button {
     background-color: #dddddd;
 }
 

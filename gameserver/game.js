@@ -3,7 +3,12 @@ var _ = require('underscore')
 var Player = require('./player')
 
 
-var detectUnitCollisions = function(lanes, callback){
+var calculateDamages = function(u1, u2){
+    u1.takeDamage(u2.damage)
+    u2.takeDamage(u1.damage)
+}
+
+var detectUnitCollisions = function(lanes){
     if (lanes[0].units.length != 0 && lanes[1].units.length != 0) {
         // select most progressed unit from each lane
         var u1 = _.max(lanes[0].units, (unit) => { return unit.progress })
@@ -15,7 +20,31 @@ var detectUnitCollisions = function(lanes, callback){
             var collisionPoint = (u1.progress + global.CONF.LENGTH_LANES - u2.progress) / 2
             u1.progress = collisionPoint
             u2.progress = global.CONF.LENGTH_LANES - collisionPoint
+            calculateDamages(u1,u2)
         }
+    } 
+}
+
+var detectHouseCollisions = function(lanes){
+    if (lanes[0].units.length != 0 || lanes[1].units.length != 0) {
+        // select most progressed unit from each lane
+        var u1 = _.max(lanes[0].units, (unit) => { return unit.progress })
+        var u2 = _.max(lanes[1].units, (unit) => { return unit.progress })
+        var l1 = lanes[0]
+        var l2 = lanes[1]
+        // compute combined progress to detect collision (current progress + speed)
+        if (u1.progress + u1.speed >= global.CONF.LENGTH_LANES) {
+            u1.moving = false
+            u1.progress = 100
+            calculateDamages(u1,l2)
+        }
+        if (u2.progress + u2.speed >= global.CONF.LENGTH_LANES) {
+            u2.moving = false
+            u2.progress = 100
+            calculateDamages(u2,l1)
+        }
+        console.log(l1)
+        console.log(l2)
     } 
 }
 
@@ -54,6 +83,8 @@ class Game {
         players.forEach((player) => {
             player.lanes.forEach((lane, i) => {
                 detectUnitCollisions([players[0].lanes[i],players[1].lanes[i]])
+                detectHouseCollisions([players[0].lanes[i],players[1].lanes[i]])
+                lane.killUnits()
             })
             players.forEach((player) => {
                 player.moveUnits() 
