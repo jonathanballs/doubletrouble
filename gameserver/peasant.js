@@ -1,8 +1,11 @@
 "use strict"
 var Unit = require('./unit')
 
-var Peasant = Unit => class extends Unit {
-    static START = 0
-    static SPEED = 0.2
-    static DAMAGE = 1
+class Peasant extends Unit {
+
+    getSpeed() { return 5 }
+    getDamage() { return 1 }
+    getStart() { return 0 }
 }
+
+module.exports = Peasant

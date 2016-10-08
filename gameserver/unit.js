@@ -3,11 +3,10 @@
 class Unit {
 
     constructor() {
-        this.progress = this.START
+        this.progress = this.getStart()
     }
 
     move(delta) {
-        this.progress = this.progress + SPEED
     }
 }
 

@@ -1,5 +1,6 @@
 "use strict"
 var lane = require('./lane')
+var units = require('./unit_list')
 
 var NUM_LANES = 2
 
@@ -16,7 +17,7 @@ class Player {
     }
 
     spawnUnit(lane, type) {
-        this.lanes[lane].addUnit(type)
+        this.lanes[lane].addUnit(new units[type]())
     }
 
     takeDamage(damage) {

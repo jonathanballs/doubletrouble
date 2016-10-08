@@ -3,11 +3,8 @@ var Player = require('./player')
 
 class Game {
     
-    constructor(id, challenger) {
-        console.log("New game");
+    constructor(id) {
         this.id = id
-        this.challenger = challenger
-        console.log(this)
     }
 
     setPlayerLeft(playerLeft) {
