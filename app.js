@@ -60,6 +60,7 @@ io.on('connection', function(socket) {
         var gameCode = generateGameCode();
         var game = new Game(gameCode);
         var player = new Player(game.id, data.playerName, socket.user_id, socket, 'Left');
+        socket.player = player
         game.setPlayerLeft(player);
         gameManager.addGame(game);
         console.log(game);
@@ -80,11 +81,9 @@ io.on('connection', function(socket) {
             game.setPlayerRight(player);
             socket.player = player;
             console.log("Player joined");
-            console.log(game);
-            socket.emit("gameJoin", {game: game.getState()});
-            game.playerLeft.socket.player = player;
-            var opp = game.playerLeft.socket;
-            opp.emit("gameJoin", {game: game.getState()});
+            socket.emit("gameJoin", { game: game.getState() });
+            var oppsocket = game.playerLeft.socket;
+            oppsocket.emit("gameJoin", {game: game.getState()});
         }
     });
 
@@ -99,9 +98,7 @@ io.on('connection', function(socket) {
 
     // Handle all the game input
     socket.on('spawn', function(options) {
-        var player = socket.player.getState()
-        var game = gameManager.getGame(player.gameId)
-        game["player"+player.side].spawnUnit(options.lane, options.type)
+        socket.player.spawnUnit(options.lane, options.type)
     })
 
     // update gamestate periodically
