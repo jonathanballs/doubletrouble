@@ -13,13 +13,6 @@ var gameport        = process.env.PORT || 4004,
     ids_given       = 0,
     games           = []; // No players playing no games
 
-var playerLeft          = new Player('left') 
-var playerRight         = new Player('right') 
-playerRight.spawnUnit(0)
-playerRight.spawnUnit(1)
-playerLeft.spawnUnit(0)
-playerLeft.spawnUnit(1)
-
 
 // Start server.
 server.listen(gameport);
@@ -68,17 +61,17 @@ io.on('connection', function(socket) {
 
     // User requests to join a game
     socket.on('createGame', function(data) {
-        var gameCode = generateGameCode();
-        var player = new Player(data.playerName, socket.user_id);
-        var game = new Game(gameCode, player);
+        var game = new Game(generateGameCode());
+        var player = new Player(game, data.playerName, socket.user_id);
+        game.setPlayerLeft(player);
         games.push(game);
     });
 
     // Player requests to join a game
     socket.on('joinGame', function(data) {
-        var player = new Player(data.playerName, socket.user_id);
+        var player = new Player(game, data.playerName, socket.user_id);
         var game = getGameByCode(data.gameCode);
-        game.setOpponent(player);
+        game.setPlayerRight(player);
         socket.player = player;
     });
 
