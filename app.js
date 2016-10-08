@@ -98,8 +98,7 @@ io.on('connection', function(socket) {
 
     // update gamestate periodically
     function updateGameState(socket) {
-        if (this.player)
-            socket.emit('gamestate', { gamestate: gameManager.getGame(socket.player.gameId).getState() } )
+        if (socket.player) socket.emit('gamestate', { gamestate: gameManager.getGame(socket.player.getState().gameId).getState() } )
     }
     setInterval(updateGameState, 1000 / 5, socket)
 
