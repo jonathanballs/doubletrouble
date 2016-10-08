@@ -8,6 +8,7 @@ var gameport        = process.env.PORT || 4004,
     app             = require('express')(),
     server          = require('http').Server(app),
     io              = require('socket.io')(server),
+    GameManager     = require('./gameserver/manager.js'),
     Game            = require('./gameserver/game.js'),
     Player          = require('./gameserver/player.js'),
     verbose         = false,
@@ -22,47 +23,10 @@ function printGameStatus(game){
     console.log(colors.green('=============================='))
 }
 // testing the game
+var testGameManager = new GameManager()
 var testGame = new Game('testGameId')
-testGame.setPlayerLeft(new Player(testGame, 'player1','p1id'))
-testGame.setPlayerRight(new Player(testGame, 'player2','p2id'))
-testGame.playerLeft.spawnUnit(0,'peasant')
-testGame.playerRight.spawnUnit(0,'knight')
-printGameStatus(testGame.playerLeft.lanes[0])
-printGameStatus(testGame.playerRight.lanes[0])
-testGame.tick()
-testGame.tick()
-testGame.tick()
-testGame.tick()
-testGame.tick()
-printGameStatus(testGame)
-printGameStatus(testGame.playerLeft.lanes[0])
-printGameStatus(testGame.playerRight.lanes[0])
-testGame.tick()
-testGame.tick()
-testGame.tick()
-testGame.tick()
-testGame.tick()
-printGameStatus(testGame)
-testGame.playerLeft.spawnUnit(0,'knight')
-testGame.playerRight.spawnUnit(0,'peasant')
-printGameStatus(testGame.playerLeft.lanes[0])
-printGameStatus(testGame.playerRight.lanes[0])
-testGame.tick()
-testGame.tick()
-testGame.tick()
-testGame.tick()
-testGame.tick()
-printGameStatus(testGame)
-printGameStatus(testGame.playerLeft.lanes[0])
-printGameStatus(testGame.playerRight.lanes[0])
-testGame.tick()
-testGame.tick()
-testGame.tick()
-testGame.tick()
-testGame.tick()
-printGameStatus(testGame)
-printGameStatus(testGame.playerLeft.lanes[0])
-printGameStatus(testGame.playerRight.lanes[0])
+testGameManager.play()
+testGameManager.addGame(testGame)
 
 // Start server.
 server.listen(gameport);
@@ -111,10 +75,13 @@ io.on('connection', function(socket) {
 
     // User requests to join a game
     socket.on('createGame', function(data) {
-        var game = new Game(generateGameCode());
+        var gameCode = generateGameCode();
+        var game = new Game(gameCode);
         var player = new Player(game, data.playerName, socket.user_id);
         game.setPlayerLeft(player);
         games.push(game);
+        console.log("sending gameCode");
+        socket.emit('newGameCode', gameCode);
     });
 
     // Player requests to join a game
