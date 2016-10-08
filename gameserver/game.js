@@ -13,9 +13,8 @@ var detectUnitCollisions = function(lanes, callback){
             u1.moving = false
             u2.moving = false
             var collisionPoint = (u1.progress + 100 - u2.progress) / 2
-            console.log(collisionPoint)
             u1.progress = collisionPoint
-            u2.progress = collisionPoint
+            u2.progress = 100 - collisionPoint
         }
     } 
 }
