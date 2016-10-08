@@ -13,8 +13,7 @@ module.exports = class Manager {
         self.games.forEach((game) => {
             game.tick()
         })
-        console.log(self.games[0].playerLeft.lanes[0])
-        console.log(self.games[0].playerRight.lanes[0])
+        console.log(self.games)
     }
 
     play() {
