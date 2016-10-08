@@ -24,3 +24,4 @@ function showJoinCreateForm() {
     document.getElementById("createGameForm").style.display = "none";
     document.getElementById("joinOrCreateForm").style.display = "block";
 }
+
