@@ -1,14 +1,13 @@
 "use strict";
 
 global.CONF = require('./configs')
+console.log(global.CONF)
 console.log("Double Trouble v0.0.1 running");
 
 var gameport        = process.env.PORT || 4004,
     app             = require('express')(),
     server          = require('http').Server(app),
     io              = require('socket.io')(server),
-    colors          = require('colors/safe'),
-    _               = require('underscore'),
     GameManager     = require('./gameserver/manager.js'),
     Game            = require('./gameserver/game.js'),
     Player          = require('./gameserver/player.js'),
@@ -17,37 +16,8 @@ var gameport        = process.env.PORT || 4004,
     update_delta    = 30, //ms
     ids_given       = 0;
 
-function printGameStatus(game){
-    console.log(colors.green('=============================='))
-    console.dir(game)
-    console.log(colors.green('=============================='))
-}
-
-function test() {
-    // testing the game
-    var testGameManager = new GameManager()
-    var testGame = new Game('testGameId')
-    testGameManager.play()
-    testGameManager.addGame(testGame)
-    testGame.setPlayerLeft(new Player(testGame, 'player1','p1id'))
-    testGame.setPlayerRight(new Player(testGame, 'player2','p2id'))
-    function sleep (time) {
-        return new Promise((resolve) => setTimeout(resolve, time));
-    }
-    sleep(1000).then(() => {
-        testGame.playerLeft.spawnUnit(0,'worker')
-    });
-    sleep(2000).then(() => {
-        testGame.playerRight.spawnUnit(0,'worker')
-    });
-    sleep(8000).then(() => {
-        testGame.playerRight.spawnUnit(0,'soldier')
-    });
-    sleep(5000).then(() => {
-        testGame.playerRight.spawnUnit(0,'soldier')
-    });
-}
-//test();
+// Play
+gameManager.play()
 
 // Start server.
 server.listen(gameport);
@@ -85,7 +55,7 @@ function generateGameCode() {
 io.on('connection', function(socket) {
     socket.userid = ids_given++;
 
-    // User requests to create a game
+    // User requests to join a game
     socket.on('createGame', function(data) {
         var gameCode = generateGameCode();
         var game = new Game(gameCode);
