@@ -104,39 +104,51 @@ class Hud {
     constructor() {
         this.hudPadding = 20;
         this.hudWidth = 168; // 128 + padding
-        this.hudStartY = playerSide ? 0 : window.innerWidth - this.hudWidth;
+        this.hudStartX = playerSide ? window.innerWidth - this.hudWidth : 0;
 
         // Background
         var bg = new PIXI.Graphics();
         bg.beginFill("0xdddddd");
-        bg.drawRect(0, 0, this.hudWidth, window.innerHeight);
+        bg.drawRect(this.hudStartX, 0, this.hudWidth, window.innerHeight);
         bg.endFill();
         bg.alpha = 0.4; // slight transparency
         this.background = bg;
 
         // Money counter
         this.moneyCounter = new PIXI.Text("Moneyz: 1000", {font:"20px sans-serif", fill:"black"});
-        this.moneyCounter.position.set(this.hudStartY, this.hudPadding);
+        this.moneyCounter.position.set(this.hudStartX + this.hudPadding, this.hudPadding);
 
-        [this.moneyCounter, this.background].forEach(function(item){stage.addChild(item)});
+        // Buttons
+        this.buttons = new Array();
+
+        [this.background, this.moneyCounter].forEach(function(item){stage.addChild(item)});
+    }
+
+    update() {
+        this.moneyCounter.text = "Moneyz: " + Math.floor(player.money);
     }
 
     addUnitButton(unitName, shortcutKey) {
-        var bts = ['Q','W','E','R','T']
-        var xDef = 20;
-        if(playerSide == 1)
-        {
-            xDef = window.innerWidth - 148;
-        }
+
+        var buttonWidth = 128;
+        var buttonHeight = 128;
+
+        var buttonStartX = this.hudStartX + this.hudPadding;
+        var buttonStartY = this.moneyCounter.position.y + this.moneyCounter.height + this.hudPadding + (this.buttons.length * (buttonHeight + this.hudPadding));
         var buttonCount = (buttons.length)/3; 
-        buttons.push(new PIXI.Graphics());
-        buttons[buttons.length -1].beginFill("0xdddddd");
-        buttons[buttons.length -1].drawRect(xDef,70 +(148*buttonCount),128,128);
-        buttons[buttons.length -1].endFill();
-        buttons[buttons.length -1].alpha = 0.35;
-        buttons.push(makeSprite(xDef, 70+(148*buttonCount), 'units/'+ sprite + (playerSide +1)));
-        buttons.push(new PIXI.Text(bts[buttonCount], {font:"30px sans-serif", fill:"black"}));
-        buttons[buttons.length -1].position.set(xDef+15,85+(148*buttonCount));
+
+        var button = new PIXI.Graphics();
+        this.buttons.push(button);
+
+        // Draw button
+        button.beginFill("0xdddddd");
+        button.drawRect(buttonStartX, buttonStartY,128,128);
+        button.endFill();
+        button.alpha = 0.35;
+        buttons.push(button);
+        buttons.push(makeSprite(buttonStartX, 70+(148*buttonCount), 'units/'+ unitName + (playerSide +1)));
+        buttons.push(new PIXI.Text(shortcutKey, {font:"30px sans-serif", fill:"black"}));
+        buttons[buttons.length -1].position.set(buttonStartX+15,85+(148*buttonCount));
     }
 }
 
@@ -246,9 +258,7 @@ function gameLoop()
             console.log("unit destroyed in order to free memory");
         } });
     //update Money counter
-    hud[1].text = "Moneyz:";
-    if(playerSide == 0){ hud[1].text += Math.floor(gamestate.playerLeft.money);}
-    else{hud[1].text += Math.floor(gamestate.playerRight.money);}
+    hud.update()
 
     draw();
 
