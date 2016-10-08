@@ -50,11 +50,13 @@ class Game {
     // this part handles interaction with the game
     tick() {
         var players = this.players()
-//        players.forEach((player) => {
-//            player.lanes.forEach((lane, i) => {
-//                detectUnitCollisions([players[0].lanes[i],players[1].lanes[i]])
-//            })
-//        })
+        if (players.length == 2) {
+            players.forEach((player) => {
+                player.lanes.forEach((lane, i) => {
+                    detectUnitCollisions([players[0].lanes[i],players[1].lanes[i]])
+                })
+            })
+        }
         players.forEach((player) => {
             player.moveUnits() 
             player.getPaid()
