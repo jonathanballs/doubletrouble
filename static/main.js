@@ -40,6 +40,7 @@ function start(pside)
         .add("static/assets/main/details/detail2.png")
         .add("static/assets/main/details/detail3.png")
         .add("static/assets/main/details/detail4.png")
+        .add("static/assets/main/coin.png")
         .load(setup);
 }
 
@@ -115,30 +116,36 @@ class Hud {
         this.background = bg;
 
         // Money counter
-        this.moneyCounter = new PIXI.Text("Moneyz: 1000", {font:"20px sans-serif", fill:"black"});
-        this.moneyCounter.position.set(this.hudStartX + this.hudPadding, this.hudPadding);
+        this.moneyCounter = new PIXI.Text("0", {font:"20px sans-serif", fill:"black"});
+        this.coinIcon = makeSprite(0, 0, "coin");
+        this.coinIcon.position.set(this.hudStartX + this.hudPadding, this.hudPadding);
+        this.coinIcon.width = this.moneyCounter.height;
+        this.coinIcon.height = this.moneyCounter.height;
+        this.moneyCounter.position.set(this.coinIcon.position.x + this.coinIcon.width + 10, this.coinIcon.position.y);
 
         // Buttons
         this.buttons = new Array();
     }
 
     paint() {
-        [this.background, this.moneyCounter].forEach(function(item){stage.addChild(item)});
+        [this.background, this.coinIcon, this.moneyCounter].forEach(function(item){stage.addChild(item)});
         this.buttons.forEach(function(button) {
             stage.addChild(button.btn);
             stage.addChild(button.sprite);
             stage.addChild(button.text);
+            stage.addChild(button.price);
         });
     }
 
     update() {
-        this.moneyCounter.text = "Moneyz: " + Math.floor(player.money);
+        this.moneyCounter.text = Math.floor(player.money);
     }
 
     addUnitButton(unitName, shortcutKey, unitPrice) {
 
         var buttonWidth = 128;
         var buttonHeight = 128;
+        var buttonPadding = 10;
 
         var buttonStartX = this.hudStartX + this.hudPadding;
         var buttonStartY = this.moneyCounter.position.y + this.moneyCounter.height + this.hudPadding + (this.buttons.length * (buttonHeight + this.hudPadding));
@@ -154,10 +161,14 @@ class Hud {
         var buttonSprite = makeSprite(buttonStartX, 70+(148*this.buttons.length), 'units/'+ unitName + (playerSide +1));
 
         // Create shorcut key text
-        var shortcutText = new PIXI.Text(shortcutKey, {font:"30px sans-serif", fill:"black"});
-        shortcutText.position.set(buttonStartX+15,buttonStartY+15);
+        var shortcutText = new PIXI.Text(shortcutKey, {font:"20px sans-serif", fill:"black"});
+        shortcutText.position.set(buttonStartX+buttonPadding, buttonStartY+buttonPadding);
 
-        this.buttons.push({btn: button, sprite: buttonSprite, text: shortcutText});
+        // Create price
+        var priceText = new PIXI.Text(unitPrice, {font:"20px sans-serif", fill:"black"});
+        priceText.position.set(buttonStartX+buttonPadding, buttonStartY+buttonHeight-buttonPadding-priceText.height);
+
+        this.buttons.push({btn: button, sprite: buttonSprite, text: shortcutText, price: priceText});
     }
 }
 
