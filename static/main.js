@@ -7,7 +7,7 @@ var hud = new Array();
 var buttons = new Array();
 var renderer = PIXI.autoDetectRenderer(window.innerWidth,window.innerHeight, {antialias:false, transparent:false, resolution:1});
 var stage = new PIXI.Container();
-// start(0);
+ start(0);
 function start(input)
 {
     player = input;
@@ -252,7 +252,7 @@ function spawn(pos,unit)
     {
         units.push(makeSprite(spawn_pos[2],spawn_pos[3], 'units/'+spawns[unit]+ (player + 1)));
     }
-    
+    socket.emit('spawn', { lane:pos, type:spawns[unit]});
 }
 function keyboard(keyCode) {
   var key = {};
