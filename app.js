@@ -23,6 +23,7 @@ function printGameStatus(game){
     console.log(colors.green('=============================='))
 }
 
+function test() {
 // testing the game
 var testGameManager = new GameManager()
 var testGame = new Game('testGameId')
@@ -45,6 +46,8 @@ sleep(8000).then(() => {
 sleep(5000).then(() => {
     testGame.playerRight.spawnUnit(0,'soldier')
 });
+}
+test();
 
 // Start server.
 server.listen(gameport);
@@ -110,6 +113,7 @@ io.on('connection', function(socket) {
             game.setPlayerRight(player);
             socket.player = player;
             console.log("Player joined");
+            console.log(game);
             //socket.emit("gameJoin", {game: game});
         }
     });
