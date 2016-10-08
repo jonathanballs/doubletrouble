@@ -12,7 +12,7 @@ module.exports = {
     WIZRD_SPEED: 5,
     WIZRD_DAMAGE: 1,
     WIZRD_START: 0,
-    WIZRD_COST: 3
+    WIZRD_COST: 3,
     WORKER_SPEED: 5,
     WORKER_DAMAGE: 1,
     WORKER_START: 0,
