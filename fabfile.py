@@ -3,10 +3,9 @@ from fabric.contrib.files import *
 from fabric.contrib.project import rsync_project
 from subprocess import check_output
 
-env.user = 'root'
-# We will have a domain soon
-env.hosts = ['138.68.159.8']
-#env.key_filename = 'cert.pem'
+env.user = 'ubuntu'
+env.hosts = ['ec2-52-88-152-45.us-west-2.compute.amazonaws.com']
+env.key_filename = 'cert.pem'
 
 def deploy():
     # Tar it up and send to server
@@ -20,23 +19,23 @@ def deploy():
     deploy_path = '/home/trouble/doubletrouble'
 
     # Delete old deploy
-    run('rm -rf {}'.format(deploy_path))
-    run('mkdir {}'.format(deploy_path))
+    run('sudo rm -rf {}'.format(deploy_path))
+    run('sudo mkdir -p {}'.format(deploy_path))
 
     # Extract new deploy
-    run('tar xf /tmp/trouble.tar.gz -C {}'.format(deploy_path))
-    run('sudo chown -R trouble:trouble {}'.format(deploy_path))
-    run('sudo chmod -R 777 {}'.format(deploy_path))
-    run("runuser -l trouble -c 'npm install {}'".format(deploy_path))
+    run('sudo tar xf /tmp/trouble.tar.gz -C {}'.format(deploy_path))
+    run('sudo chown -R trouble:trouble /home/trouble'.format(deploy_path))
+    run('sudo chmod -R 777 /home/trouble'.format(deploy_path))
+    run("sudo npm install {}".format(deploy_path))
 
     run('sudo cp {}/trouble.service /lib/systemd/system/trouble.service'.format(deploy_path))
     run('sudo service trouble restart')
-    run('rm /tmp/trouble.tar.gz')
+    run('sudo rm /tmp/trouble.tar.gz')
     local('rm /tmp/trouble.tar.gz')
 
 def provision():
-    run('apt-get install -y htop tmux nodejs-legacy npm')
-    run('id -u somename &>/dev/null || (useradd trouble && mkdir /home/trouble/ && chown trouble:trouble /home/trouble)')
+    run('sudo apt-get install -y htop tmux nodejs-legacy npm')
+    run('sudo id -u trouble &>/dev/null || (sudo useradd trouble && sudo mkdir /home/trouble/ && sudo chown trouble:trouble /home/trouble)')
 
 def restart():
     run('service doubletrouble restart');
