@@ -1,3 +1,5 @@
+var isHost = 0;
+
 function showNewGameForm() {
     document.getElementById("joinOrCreateForm").style.display = "none";
     document.getElementById("createGameForm").style.display = "block";
@@ -26,10 +28,11 @@ function joinGame() {
     var gameCode = document.getElementsByName("joinGameCode")[0].value;
     console.log("Joining game with name " + name + " and code " + gameCode);
     socket.emit("joinGame", {playerName: name, gameCode: gameCode});
+    isHost = 1;
 }
 
 socket.on("gameJoin", function(data) {
-    console.log(data);
+    start(isHost);
 });
 
 function showJoinCreateForm() {
