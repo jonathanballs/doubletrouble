@@ -7,6 +7,7 @@ class Peasant extends Unit {
     getUnitTypeDamage() { return 1 }
     getUnitTypeMovingStatus() { return true }
     getUnitTypeStart() { return 0 }
+    getUnitTypeCost() { return 3 }
 }
 
 module.exports = Peasant

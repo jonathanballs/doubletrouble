@@ -19,7 +19,10 @@ class Player {
     }
 
     spawnUnit(lane, type) {
-        this.lanes[lane].addUnit(new units[type]())
+        var unit = new units[type]()
+        if (unit.getUnitTypeCost() <= this.money) {
+            this.lanes[lane].addUnit(new units[type]())
+        }
     }
 
     takeDamage(damage) {
