@@ -21,6 +21,7 @@ class Game {
     tick() {
         this.players().forEach((player) => {
             player.moveUnits() 
+            player.getPaid()
         })
     }
 

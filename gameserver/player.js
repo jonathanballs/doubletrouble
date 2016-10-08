@@ -11,6 +11,8 @@ class Player {
         this.name = name
         this.id = id
         this.health = 100
+        this.income = 1
+        this.money = 5
         this.lanes = Array(NUM_LANES).fill().map((_, i) => {
             return new lane(i)
         })
@@ -30,6 +32,10 @@ class Player {
                 unit.move()
             })
         })
+    }
+
+    getPaid() {
+        this.money += this.income
     }
 }
 
