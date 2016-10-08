@@ -82,6 +82,7 @@ io.on('connection', function(socket) {
             console.log("Player joined");
             console.log(game);
             socket.emit("gameJoin", {game: game.getState()});
+            game.playerLeft.socket.player = player;
             var opp = game.playerLeft.socket;
             opp.emit("gameJoin", {game: game.getState()});
         }
@@ -100,7 +101,7 @@ io.on('connection', function(socket) {
     function updateGameState(socket) {
         if (socket.player) socket.emit('gamestate', { gamestate: gameManager.getGame(socket.player.getState().gameId).getState() } )
     }
-    setInterval(updateGameState, 1000 / 5, socket)
+    setInterval(updateGameState, 1000 / global.CONF.STATE_UPDATES_PER_SECOND, socket)
 
 });
 

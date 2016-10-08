@@ -1,4 +1,5 @@
 module.exports = {
+    STATE_UPDATES_PER_SECOND: 5,
     TICKS_PER_SECOND: 3,
     LENGTH_LANES: 1000,
     NUM_LANES: 2,
