@@ -9,6 +9,7 @@ var gameport        = process.env.PORT || 4004,
     io              = require('socket.io')(server),
     colors          = require('colors/safe'),
     _               = require('underscore'),
+    GameManager     = require('./gameserver/manager.js'),
     Game            = require('./gameserver/game.js'),
     Player          = require('./gameserver/player.js'),
     verbose         = false,
@@ -23,50 +24,27 @@ function printGameStatus(game){
 }
 
 // testing the game
-function test() {
-    var testGame = new Game('testGameId')
-    testGame.setPlayerLeft(new Player(testGame, 'player1','p1id'))
-    testGame.setPlayerRight(new Player(testGame, 'player2','p2id'))
-    testGame.playerLeft.spawnUnit(0,'peasant')
-    testGame.playerRight.spawnUnit(0,'knight')
-    printGameStatus(testGame.playerLeft.lanes[0])
-    printGameStatus(testGame.playerRight.lanes[0])
-    testGame.tick()
-    testGame.tick()
-    testGame.tick()
-    testGame.tick()
-    testGame.tick()
-    printGameStatus(testGame)
-    printGameStatus(testGame.playerLeft.lanes[0])
-    printGameStatus(testGame.playerRight.lanes[0])
-    testGame.tick()
-    testGame.tick()
-    testGame.tick()
-    testGame.tick()
-    testGame.tick()
-    printGameStatus(testGame)
-    testGame.playerLeft.spawnUnit(0,'knight')
-    testGame.playerRight.spawnUnit(0,'peasant')
-    printGameStatus(testGame.playerLeft.lanes[0])
-    printGameStatus(testGame.playerRight.lanes[0])
-    testGame.tick()
-    testGame.tick()
-    testGame.tick()
-    testGame.tick()
-    testGame.tick()
-    printGameStatus(testGame)
-    printGameStatus(testGame.playerLeft.lanes[0])
-    printGameStatus(testGame.playerRight.lanes[0])
-    testGame.tick()
-    testGame.tick()
-    testGame.tick()
-    testGame.tick()
-    testGame.tick()
-    printGameStatus(testGame)
-    printGameStatus(testGame.playerLeft.lanes[0])
-    printGameStatus(testGame.playerRight.lanes[0])
+var testGameManager = new GameManager()
+var testGame = new Game('testGameId')
+testGameManager.play()
+testGameManager.addGame(testGame)
+testGame.setPlayerLeft(new Player(testGame, 'player1','p1id'))
+testGame.setPlayerRight(new Player(testGame, 'player2','p2id'))
+function sleep (time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
 }
-//test();
+sleep(1000).then(() => {
+    testGame.playerLeft.spawnUnit(0,'worker')
+});
+sleep(2000).then(() => {
+    testGame.playerRight.spawnUnit(0,'worker')
+});
+sleep(8000).then(() => {
+    testGame.playerRight.spawnUnit(0,'soldier')
+});
+sleep(5000).then(() => {
+    testGame.playerRight.spawnUnit(0,'soldier')
+});
 
 // Start server.
 server.listen(gameport);
