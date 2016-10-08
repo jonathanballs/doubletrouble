@@ -15,6 +15,7 @@ class Lane {
 
     killUnits() {
         this.units = _.filter(this.units, (unit) => { return unit.health > 0 })
+        console.log(this.units)
     }
 }
 
