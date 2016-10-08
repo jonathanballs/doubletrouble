@@ -2,7 +2,7 @@
 var Player = require('./player')
 
 class Game {
-    
+
     constructor(id) {
         this.id = id
     }
@@ -12,6 +12,16 @@ class Game {
     }
     setPlayerRight(playerRight) {
         this.playerRight = playerRight
+    }
+    players() {
+        return [this.playerLeft, this.playerRight]
+    }
+
+    // this part handles interaction with the game
+    tick() {
+        this.players().forEach((player) => {
+            player.moveUnits() 
+        })
     }
 
 }

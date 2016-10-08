@@ -5,7 +5,7 @@ var units = require('./unit_list')
 var NUM_LANES = 2
 
 class Player {
-    
+
     constructor(game, name, id) {
         this.game = game
         this.name = name
@@ -21,7 +21,15 @@ class Player {
     }
 
     takeDamage(damage) {
-        this.health = this.health - damage
+        this.health -= damage
+    }
+
+    moveUnits() {
+        this.lanes.forEach((lane) => {
+            lane.units.forEach((unit) => {
+                unit.move()
+            })
+        })
     }
 }
 
