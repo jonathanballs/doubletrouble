@@ -25,12 +25,13 @@ module.exports = class Manager {
     }
 
     getGame(gameId) {
-       for(var i = 0; i<this.games.length; i++) {
-           if (this.games[i].id == gameId) {
-               return this.games[i];
+        gameId = gameId.toUpperCase();
+        for(var i = 0; i<this.games.length; i++) {
+            if (this.games[i].id == gameId) {
+                return this.games[i];
             }
-       }
-       return null;
+        }
+        return null;
     }
 }
 
