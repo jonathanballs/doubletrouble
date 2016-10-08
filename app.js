@@ -1,13 +1,14 @@
 "use strict";
 
 global.CONF = require('./configs')
-console.log(global.CONF)
 console.log("Double Trouble v0.0.1 running");
 
 var gameport        = process.env.PORT || 4004,
     app             = require('express')(),
     server          = require('http').Server(app),
     io              = require('socket.io')(server),
+    colors          = require('colors/safe'),
+    _               = require('underscore'),
     GameManager     = require('./gameserver/manager.js'),
     Game            = require('./gameserver/game.js'),
     Player          = require('./gameserver/player.js'),
@@ -16,17 +17,37 @@ var gameport        = process.env.PORT || 4004,
     ids_given       = 0,
     games           = []; // No players playing no games
 
-var colors = require('colors/safe');
 function printGameStatus(game){
     console.log(colors.green('=============================='))
     console.dir(game)
     console.log(colors.green('=============================='))
 }
-// testing the game
-var testGameManager = new GameManager()
-var testGame = new Game('testGameId')
-testGameManager.play()
-testGameManager.addGame(testGame)
+
+function test() {
+    // testing the game
+    var testGameManager = new GameManager()
+    var testGame = new Game('testGameId')
+    testGameManager.play()
+    testGameManager.addGame(testGame)
+    testGame.setPlayerLeft(new Player(testGame, 'player1','p1id'))
+    testGame.setPlayerRight(new Player(testGame, 'player2','p2id'))
+    function sleep (time) {
+        return new Promise((resolve) => setTimeout(resolve, time));
+    }
+    sleep(1000).then(() => {
+        testGame.playerLeft.spawnUnit(0,'worker')
+    });
+    sleep(2000).then(() => {
+        testGame.playerRight.spawnUnit(0,'worker')
+    });
+    sleep(8000).then(() => {
+        testGame.playerRight.spawnUnit(0,'soldier')
+    });
+    sleep(5000).then(() => {
+        testGame.playerRight.spawnUnit(0,'soldier')
+    });
+}
+test();
 
 // Start server.
 server.listen(gameport);
@@ -47,12 +68,9 @@ app.get('/static/*', function(req, res, next) {
 
 
 function getGameByCode(gameCode) {
-    games.forEach(function(game) {
-        if (game.code == gameCode) {
-            return game;
-        }
-    });
-    return null;
+    gameCode = gameCode.toUpperCase();
+    console.log(games);
+    return _.find(games, (game) => { return game.id == gameCode });
 }
 
 function generateGameCode() {
@@ -73,14 +91,14 @@ function generateGameCode() {
 io.on('connection', function(socket) {
     socket.userid = ids_given++;
 
-    // User requests to join a game
+    // User requests to create a game
     socket.on('createGame', function(data) {
         var gameCode = generateGameCode();
         var game = new Game(gameCode);
         var player = new Player(game, data.playerName, socket.user_id);
         game.setPlayerLeft(player);
         games.push(game);
-        console.log("sending gameCode");
+        console.log("sending gameCode " + gameCode);
         socket.emit('newGameCode', gameCode);
     });
 
@@ -88,8 +106,16 @@ io.on('connection', function(socket) {
     socket.on('joinGame', function(data) {
         var player = new Player(game, data.playerName, socket.user_id);
         var game = getGameByCode(data.gameCode);
-        game.setPlayerRight(player);
-        socket.player = player;
+        if (game == null) {
+            socket.emit("gameJoin", {game: null});
+        }
+        else {
+            game.setPlayerRight(player);
+            socket.player = player;
+            console.log("Player joined");
+            console.log(game);
+            //socket.emit("gameJoin", {game: game});
+        }
     });
 
     // Assign them a unique ID.
@@ -100,5 +126,12 @@ io.on('connection', function(socket) {
     socket.on('disconnect', function() {
         console.log('Player ' + socket.userid + ' disconnected');
     });
+
+    // update gamestate periodically
+    function updateGameState(socket) {
+        socket.emit('gamestate', { gamestate: socket.player.game } )
+    }
+    setInterval(updateGameState, 1000 / 5, socket)
+
 });
 
