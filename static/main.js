@@ -241,7 +241,7 @@ function gameLoop()
     //update Money counter
     hud[1].text = "Moneyz:";
     if(player == 0){ hud[1].text += Math.floor(gamestate.playerLeft.money);}
-    else{hud[1].text += gamestate.playerRight.money;}
+    else{hud[1].text += Math.floor(gamestate.playerRight.money);}
 
     draw();
 
@@ -277,7 +277,7 @@ function draw()
             {
                 if(player == 0)
                 {
-                units.push(makeSprite(spawn_pos[0]+((window.innerWidth-128)*(unit.progress / 100 )),spawn_pos[1],"units/"+ unit.type +(player+1)));
+                units.push(makeSprite(spawn_pos[0]+((window.innerWidth+128)*(unit.progress/100)),spawn_pos[1],"units/"+ unit.type +(player+1)));
                 }else{
                 units.push(makeSprite(spawn_pos[0]-(spawn_pos[0]*(unit.progress / 100 )),spawn_pos[1],"units/"+unit.type + (player+1)));
                 }
@@ -286,7 +286,7 @@ function draw()
             {
                 if(player == 0)
                 {
-                    units.push(makeSprite(window.innerWidth-((window.innerWidth - spawn_pos[0])*unit.progress/100),spawn_pos[1],"units/"+ unit.type +oPlayer));
+                    units.push(makeSprite(window.innerWidth-((window.innerWidth - spawn_pos[0])*(unit.progress/100)),spawn_pos[1],"units/"+ unit.type +oPlayer));
                 }else{
                     units.push(makeSprite(spawn_pos[0]*(unit.progress/100),spawn_pos[1],"units/"+ unit.type +oPlayer));
                     

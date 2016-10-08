@@ -1,5 +1,6 @@
 "use strict";
 
+require('dotenv').config()
 global.CONF = require('./configs')
 console.log(global.CONF)
 console.log("Double Trouble v0.0.1 running");
@@ -84,6 +85,10 @@ io.on('connection', function(socket) {
             socket.emit("gameJoin", { game: game.getState() });
             var oppsocket = game.playerLeft.socket;
             oppsocket.emit("gameJoin", {game: game.getState()});
+
+            // Initial money just for hacking
+            player.money = 500;
+            game.playerLeft.money = 500;
         }
     });
 
