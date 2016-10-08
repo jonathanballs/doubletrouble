@@ -8,6 +8,7 @@ class Soldier extends Unit {
     getUnitTypeMovingStatus() { return true }
     getUnitTypeStart() { return global.CONF.SOLDIER_START }
     getUnitTypeCost() { return global.CONF.SOLDIER_COST }
+    getUnitType() { return 'soldier' }
 }
 
 module.exports = Soldier

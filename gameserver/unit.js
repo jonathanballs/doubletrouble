@@ -6,10 +6,12 @@ class Unit {
         this.progress = this.getUnitTypeStart()
         this.speed = this.getUnitTypeSpeed()
         this.moving = this.getUnitTypeMovingStatus()
+        this.type = this.getUnitType()
     }
 
     move(delta) {
-        if (this.moving) { this.progress += this.speed }
+        // progress by delta per second now
+        if (this.moving) { this.progress += this.speed / global.CONF.TICKS_PER_SECOND }
     }
 }
 

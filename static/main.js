@@ -342,5 +342,6 @@ function keyboard(keyCode) {
 socket.on('gamestate', function(data)
         {
             gamestate = data.gamestate;
+            console.log(gamestate.playerLeft.lanes[0]);
         });
 
