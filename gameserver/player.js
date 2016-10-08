@@ -4,8 +4,8 @@ var units = require('./unit_list')
 
 class Player {
 
-    constructor(game, name, id) {
-        this.game = game
+    constructor(gameId, name, id) {
+        this.gameId = gameId
         this.name = name
         this.id = id
         this.health = 100
