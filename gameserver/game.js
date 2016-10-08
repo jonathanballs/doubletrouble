@@ -52,6 +52,7 @@ class Game {
 
     constructor(id) {
         this.id = id
+        this.active = true
     }
 
     getState() {
@@ -85,6 +86,10 @@ class Game {
                 detectUnitCollisions([players[0].lanes[i],players[1].lanes[i]])
                 detectHouseCollisions([players[0].lanes[i],players[1].lanes[i]])
                 lane.killUnits()
+                if (lane.health <= 0) {
+                    lane.active = false
+                    // kill the person here
+                }
             })
             players.forEach((player) => {
                 player.moveUnits() 
