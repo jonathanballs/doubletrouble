@@ -277,7 +277,7 @@ function draw()
             {
                 if(player == 0)
                 {
-                units.push(makeSprite(spawn_pos[0]+((window.innerWidth)*(unit.progress / 100 )),spawn_pos[1],"units/"+ unit.type +(player+1)));
+                units.push(makeSprite(spawn_pos[0]+((window.innerWidth-128)*(unit.progress / 100 )),spawn_pos[1],"units/"+ unit.type +(player+1)));
                 }else{
                 units.push(makeSprite(spawn_pos[0]-(spawn_pos[0]*(unit.progress / 100 )),spawn_pos[1],"units/"+unit.type + (player+1)));
                 }
