@@ -5,7 +5,6 @@ var gamestate;
 var units = new Array();
 var spawn_pos = new Array();
 var hud = new Array();
-var buttons = new Array();
 var renderer = PIXI.autoDetectRenderer(window.innerWidth,window.innerHeight, {antialias:false, transparent:false, resolution:1});
 var stage = new PIXI.Container();
 
@@ -73,9 +72,10 @@ function setup()
     makeRoads(init);    
     makeHuts(init);
     hud = new Hud();
-    makeButtons();
-
-    buttons.forEach(function(item){stage.addChild(item)});
+    hud.addUnitButton("worker", "Q");
+    hud.addUnitButton("soldier", "W");
+    hud.addUnitButton("wizard", "E");
+    hud.paint();
 
     //render
     renderer.render(stage);
@@ -120,8 +120,15 @@ class Hud {
 
         // Buttons
         this.buttons = new Array();
+    }
 
+    paint() {
         [this.background, this.moneyCounter].forEach(function(item){stage.addChild(item)});
+        this.buttons.forEach(function(button) {
+            stage.addChild(button.btn);
+            stage.addChild(button.sprite);
+            stage.addChild(button.text);
+        });
     }
 
     update() {
@@ -135,33 +142,25 @@ class Hud {
 
         var buttonStartX = this.hudStartX + this.hudPadding;
         var buttonStartY = this.moneyCounter.position.y + this.moneyCounter.height + this.hudPadding + (this.buttons.length * (buttonHeight + this.hudPadding));
-        var buttonCount = (buttons.length)/3; 
 
+        // Create button
         var button = new PIXI.Graphics();
-        this.buttons.push(button);
-
-        // Draw button
         button.beginFill("0xdddddd");
         button.drawRect(buttonStartX, buttonStartY,128,128);
         button.endFill();
         button.alpha = 0.35;
-        buttons.push(button);
-        buttons.push(makeSprite(buttonStartX, 70+(148*buttonCount), 'units/'+ unitName + (playerSide +1)));
-        buttons.push(new PIXI.Text(shortcutKey, {font:"30px sans-serif", fill:"black"}));
-        buttons[buttons.length -1].position.set(buttonStartX+15,85+(148*buttonCount));
+
+        // Create sprite
+        var buttonSprite = makeSprite(buttonStartX, 70+(148*this.buttons.length), 'units/'+ unitName + (playerSide +1));
+
+        // Create shorcut key text
+        var shortcutText = new PIXI.Text(shortcutKey, {font:"30px sans-serif", fill:"black"});
+        shortcutText.position.set(buttonStartX+15,85+(148*this.buttons.length));
+
+        this.buttons.push({btn: button, sprite: buttonSprite, text: shortcutText});
     }
 }
 
-function makeButtons()
-{
-    hud.addUnitButton("worker", "Q");
-    hud.addUnitButton("soldier", "W");
-    hud.addUnitButton("wizard", "E");
-}
-
-function makeButton(sprite)
-{
-}
 function makeSprite(x, y, sprite)
 {
     var tmp = new PIXI.Sprite(PIXI.loader.resources["static/assets/main/"+sprite+".png"].texture);
