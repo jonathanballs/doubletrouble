@@ -7,6 +7,7 @@ class Lane {
     constructor(lane_num) {
         this.num = lane_num
         this.units = []
+        this.health = 10
     }
 
     addUnit(unit) {
@@ -16,6 +17,10 @@ class Lane {
     killUnits() {
         this.units = _.filter(this.units, (unit) => { return unit.health > 0 })
         console.log(this.units)
+    }
+
+    takeDamage(d) {
+        this.health -= d
     }
 }
 

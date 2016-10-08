@@ -264,8 +264,12 @@ function draw()
     if(player == 0)
     {
         var lanes = gamestate.playerLeft.lanes;
+        var opLanes = gamestate.playerRight.lanes;
+        var oPlayer = 2;
     }else{
         var lanes = gamestate.playerRight.lanes;
+        var opLanes = gamestate.playerLeft.lanes;
+        var oPlayer = 1;
     }
     units.forEach(function(unit) {
             units.splice(units.indexOf(unit),1);
@@ -275,11 +279,21 @@ function draw()
             {
                 if(player == 0)
                 {
-                units.push(makeSprite(spawn_pos[0]+(window.innerWidth*(unit.progress / 100 )),spawn_pos[1],"units/soldier1"));
+                units.push(makeSprite(spawn_pos[0]+500+(window.innerWidth*(unit.progress / 100 )-spawn_pos[0]),spawn_pos[1],"units/"+ unit.type +(player+1)));
                 }else{
                 units.push(makeSprite(spawn_pos[0]-(spawn_pos[0]*(unit.progress / 100 )),spawn_pos[1],"units/soldier1"));
                 }
             });
+    opLanes[0].units.forEach(function(unit)
+            {
+                if(player == 0)
+                {
+                    units.push(makeSprite(window.innerWidth-(window.innerWidth-spawn_pos[0])*(unit.progress/100),spawn_pos[1],"units/"+ unit.type +oPlayer));
+                }else{
+                    units.push(makeSprite(spawn_pos[0]*(unit.progress/100),spawn_pos[1],"units/"+ unit.type +oPlayer));
+                    
+                }
+            })
 
 }
 function keyboard(keyCode) {
@@ -342,6 +356,5 @@ function keyboard(keyCode) {
 socket.on('gamestate', function(data)
         {
             gamestate = data.gamestate;
-            console.log(gamestate.playerLeft.lanes[0]);
         });
 
