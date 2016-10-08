@@ -267,11 +267,9 @@ function spawn(pos,unit)
     var spawns = ['worker', 'soldier', 'wizard'];
     if (pos == 0)
     {
-        //units.push(makeSprite(spawn_pos[0],spawn_pos[1], 'units/'+spawns[unit]+ (player + 1)));
     }
     else
     {
-        //units.push(makeSprite(spawn_pos[2],spawn_pos[3], 'units/'+spawns[unit]+ (player + 1)));
     }
     socket.emit('spawn', { lane:pos, type:spawns[unit]});
 }
@@ -293,21 +291,42 @@ function draw()
             })
     lanes[0].units.forEach(function(unit)
             {
+                var ends = [renderer.width,spawn_pos[0]];
                 if(playerSide == 0)
                 {
-                units.push(makeSprite(spawn_pos[0]+500+(window.innerWidth*(unit.progress / 100 )-spawn_pos[0]),spawn_pos[1],"units/"+ unit.type +(playerSide+1)));
+                    var spawn = [spawn_pos[0]+64,renderer.width];
+                    if(unit.progress < 50)
+                    {
+                        units.push(makeSprite(spawn[0] + (ends[0]-spawn[0])*(unit.progress/50),spawn_pos[1]+64,"units/"+ unit.type +(playerSide+1)));
+                        units[units.length-1].anchor.set(0.5,0.5);
+                    }
                 }else{
-                units.push(makeSprite(spawn_pos[0]-(spawn_pos[0]*(unit.progress / 100 )),spawn_pos[1],"units/soldier1"));
+                    var spawn = [spawn_pos[0],renderer.width];
+                    if(unit.progress <50)
+                    {
+                        units.push(makeSprite(spawn[0]-(spawn[0])*(unit.progress / 50),spawn_pos[1]+64,"units/" + unit.type + (playerSide+1)));
+                        units[units.length-1].anchor.set(0.5,0.5);
+                    }
                 }
             });
     opLanes[0].units.forEach(function(unit)
             {
+                var spawn = [spawn_pos[0]+128,renderer.width];
+                var ends = [renderer.width,spawn_pos[0]];
                 if(playerSide == 0)
                 {
-                    units.push(makeSprite(window.innerWidth-(window.innerWidth-spawn_pos[0])*(unit.progress/100),spawn_pos[1],"units/"+ unit.type +oPlayer));
+                    if(unit.progress > 50)
+                    {
+                        units.push(makeSprite(spawn[1] - (spawn[1]-ends[1])*((unit.progress - 50)/50),spawn_pos[1]+64,"units/"+ unit.type +oPlayer));
+                        units[units.length-1].anchor.set(0.5,0.5);
+                    }
                 }else{
-                    units.push(makeSprite(spawn_pos[0]*(unit.progress/100),spawn_pos[1],"units/"+ unit.type +oPlayer));
-                    
+                    if(unit.progress > 50)
+                    {
+                        console.log(unit.x);
+                        units.push(makeSprite((ends[1])*((unit.progress-50)/50),spawn_pos[1]+64,"units/"+ unit.type +oPlayer));
+                        units[units.length-1].anchor.set(0.5,0.5);
+                    }
                 }
             })
 
