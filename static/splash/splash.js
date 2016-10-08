@@ -35,6 +35,10 @@ function joinGame() {
 }
 
 socket.on("gameJoin", function(data) {
+    if (data.game == null) {
+        alert("We couldn't find a game with that code :(");
+        return false;
+    }
     start(isHost);
 });
 
