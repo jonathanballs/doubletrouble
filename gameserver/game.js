@@ -2,17 +2,29 @@
 var Player = require('./player')
 
 class Game {
-    
-    constructor(id, challenger) {
-        console.log("New game");
+
+    constructor(id) {
         this.id = id
-        this.challenger = challenger
-        console.log(this)
     }
 
-    setOpponent(opponent) {
-        this.opponent = opponent
+    setPlayerLeft(playerLeft) {
+        this.playerLeft = playerLeft
     }
+    setPlayerRight(playerRight) {
+        this.playerRight = playerRight
+    }
+    players() {
+        return [this.playerLeft, this.playerRight]
+    }
+
+    // this part handles interaction with the game
+    tick() {
+        this.players().forEach((player) => {
+            player.moveUnits() 
+            player.getPaid()
+        })
+    }
+
 }
 
 module.exports = Game;

@@ -3,9 +3,12 @@
 class Unit {
 
     constructor() {
-        console.log("New Unit")
-        this.progress = 0
-        console.log(this)
+        this.progress = this.getUnitTypeStart()
+        this.speed = this.getUnitTypeSpeed()
+    }
+
+    move(delta) {
+        this.progress += this.speed
     }
 }
 

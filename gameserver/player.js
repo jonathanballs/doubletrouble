@@ -1,25 +1,41 @@
 "use strict"
 var lane = require('./lane')
+var units = require('./unit_list')
 
 var NUM_LANES = 2
 
 class Player {
-    
-    constructor(side, name, id) {
-        console.log("New player on " + side + " side")
-        this.side = side
+
+    constructor(game, name, id) {
+        this.game = game
         this.name = name
         this.id = id
+        this.health = 100
+        this.income = 1
+        this.money = 5
         this.lanes = Array(NUM_LANES).fill().map((_, i) => {
             return new lane(i)
         })
-        console.log(this)
     }
 
-    spawnUnit(lane) {
-        console.log("Spawning unit for " + this.side + " player")
-        this.lanes[lane].addUnit()
-        console.log(this)
+    spawnUnit(lane, type) {
+        this.lanes[lane].addUnit(new units[type]())
+    }
+
+    takeDamage(damage) {
+        this.health -= damage
+    }
+
+    moveUnits() {
+        this.lanes.forEach((lane) => {
+            lane.units.forEach((unit) => {
+                unit.move()
+            })
+        })
+    }
+
+    getPaid() {
+        this.money += this.income
     }
 }
 
