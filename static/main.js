@@ -1,11 +1,16 @@
 //setup
 var player = 0;
+var units = new Array();
+var spawn_pos = new Array();
+
 var renderer = PIXI.autoDetectRenderer(window.innerWidth,window.innerHeight, {antialias:false, transparent:false, resolution:1});
 var stage = new PIXI.Container();
+start();
 function start()
 {
 var bodyRef = document.body;
 document.body.appendChild(renderer.view);
+//loading assets
 PIXI.loader
     .add("static/assets/main/grass.png")
     .add("static/assets/main/blTile.png")
@@ -20,6 +25,12 @@ PIXI.loader
     .add("static/assets/main/castle1.png")
     .add("static/assets/main/castle2.png")
     .add("static/assets/main/house.png")
+    .add("static/assets/main/units/soldier1.png")
+    .add("static/assets/main/units/soldier2.png")
+    .add("static/assets/main/units/wizard1.png")
+    .add("static/assets/main/units/wizard2.png")
+    .add("static/assets/main/units/worker1.png")
+    .add("static/assets/main/units/worker2.png")
     .load(setup);
 }
 
@@ -69,10 +80,18 @@ function makeHuts(init)
     if(player == 0)
     {
         huts.push(makeSprite(init[0]+256+32,init[1]-256+32,"house"));
+        spawn_pos[0] = huts[0].x; 
+        spawn_pos[1] = huts[0].y - 43; 
         huts.push(makeSprite(init[0]+256+32,init[1]+256+32,"house"));
+        spawn_pos[2] = huts[1].x; 
+        spawn_pos[3] = huts[1].y - 43; 
     }else{
         huts.push(makeSprite(init[0]-384+32,init[1]-256+32,"house"));
+        spawn_pos[0] = huts[0].x; 
+        spawn_pos[1] = huts[0].y - 43; 
         huts.push(makeSprite(init[0]-384+32,init[1]+256+32,"house"));
+        spawn_pos[2] = huts[1].x; 
+        spawn_pos[3] = huts[1].y - 43; 
     }
 }
 function makeRoads(init)
@@ -128,4 +147,18 @@ function makeCastle(xInit)
     stage.addChild(castle[0]);
     stage.addChild(castle[1]);
     return castle[0].y - 30;   
+}
+
+//GAME LOOP GOODNESS
+gameLoop();
+function gameLoop()
+{
+    requestAnimationFrame(gameLoop);
+    renderer.render(stage);
+    // units[0].x = units[0].x + 1;
+    units.forEach(function(unit) { unit.x = unit.x + 1; });
+}
+function spawn()
+{
+    units.push(makeSprite(spawn_pos[0],spawn_pos[1], 'units/worker1'));
 }
