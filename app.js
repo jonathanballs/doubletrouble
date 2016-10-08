@@ -62,6 +62,8 @@ io.on('connection', function(socket) {
         var player = new Player(game.id, data.playerName, socket.user_id);
         game.setPlayerLeft(player);
         gameManager.addGame(game);
+        console.log(game);
+        console.log(gameManager.getGame(game.id));
         console.log("sending gameCode " + gameCode);
         socket.emit('newGameCode', gameCode);
     });

@@ -13,7 +13,7 @@ module.exports = class Manager {
         self.games.forEach((game) => {
             game.tick()
         })
-        console.log(self.games)
+        //console.log(self.games)
     }
 
     play() {
@@ -26,7 +26,12 @@ module.exports = class Manager {
     }
 
     getGame(gameId) {
-        _.find(this.games, (game) => { return game.id == gameId })
+       for(var i = 0; i<this.games.length; i++) {
+           if (this.games[i].id == gameId) {
+               return this.games[i];
+            }
+       }
+       return null;
     }
-
 }
+
