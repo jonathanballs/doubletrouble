@@ -7,7 +7,7 @@ var hud = new Array();
 var buttons = new Array();
 var renderer = PIXI.autoDetectRenderer(window.innerWidth,window.innerHeight, {antialias:false, transparent:false, resolution:1});
 var stage = new PIXI.Container();
- start(0);
+//start(0);
 function start(input)
 {
     player = input;
@@ -238,7 +238,6 @@ function gameLoop()
             stage.removeChild(unit);
             console.log("unit destroyed in order to free memory");
         } });
-    units.forEach(function(unit) { unit.x++});
 
 }
 function spawn(pos,unit)
@@ -246,11 +245,11 @@ function spawn(pos,unit)
     var spawns = ['worker', 'soldier', 'wizard'];
     if (pos == 0)
     {
-        units.push(makeSprite(spawn_pos[0],spawn_pos[1], 'units/'+spawns[unit]+ (player + 1)));
+        //units.push(makeSprite(spawn_pos[0],spawn_pos[1], 'units/'+spawns[unit]+ (player + 1)));
     }
     else
     {
-        units.push(makeSprite(spawn_pos[2],spawn_pos[3], 'units/'+spawns[unit]+ (player + 1)));
+        //units.push(makeSprite(spawn_pos[2],spawn_pos[3], 'units/'+spawns[unit]+ (player + 1)));
     }
     socket.emit('spawn', { lane:pos, type:spawns[unit]});
 }
