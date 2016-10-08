@@ -15,8 +15,14 @@ var detectUnitCollisions = function(lanes, callback){
             var collisionPoint = (u1.progress + global.CONF.LENGTH_LANES - u2.progress) / 2
             u1.progress = collisionPoint
             u2.progress = global.CONF.LENGTH_LANES - collisionPoint
+            calculateDamages(u1,u2)
         }
     } 
+}
+
+var calculateDamages = function(u1, u2){
+    u1.takeDamage(u2.damage)
+    u2.takeDamage(u1.damage)
 }
 
 class Game {
@@ -54,6 +60,7 @@ class Game {
         players.forEach((player) => {
             player.lanes.forEach((lane, i) => {
                 detectUnitCollisions([players[0].lanes[i],players[1].lanes[i]])
+                lane.killUnits()
             })
             players.forEach((player) => {
                 player.moveUnits() 

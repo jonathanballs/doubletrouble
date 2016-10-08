@@ -1,6 +1,6 @@
 module.exports = {
     STATE_UPDATES_PER_SECOND: 1,
-    TICKS_PER_SECOND: 25,
+    TICKS_PER_SECOND: 2,
     LENGTH_LANES: 100,
     NUM_LANES: 2,
     PLAYER_INCOME: 1,
