@@ -293,7 +293,7 @@ function keyboard(keyCode) {
 //Socket.io stuff
 socket.on('gamestate', function(data)
         {
-            gamestate = data;
-            console.log(gamestate);
+            gamestate = data.gamestate;
+            console.log(gamestate.playerLeft.lanes[0]);
         });
 
