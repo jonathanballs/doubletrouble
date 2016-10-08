@@ -7,10 +7,11 @@ var buttons = new Array();
 
 var renderer = PIXI.autoDetectRenderer(window.innerWidth,window.innerHeight, {antialias:false, transparent:false, resolution:1});
 var stage = new PIXI.Container();
-
+start();
 function start()
 {
 var bodyRef = document.body;
+bodyRef.innerHTML = "";
 document.body.appendChild(renderer.view);
 //loading assets
 PIXI.loader
