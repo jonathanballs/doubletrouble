@@ -10,15 +10,21 @@ img.logo {
     padding-bottom: 2em;
 }
 
+.formControl {
+    width: 400px;
+    margin:auto;
+    position: relative;
+}
+
 .formControl > *{
     display: block;
     margin:auto;
-    width: 400px;
     height: 70px;
     margin-top: 20px;
     font-family: "Courier New", Courier, monospace;
     font-size: 1.5em;
     font-weight: bold;
+    width: 100%;
 }
 
 .formControl > button {
@@ -34,4 +40,20 @@ img.logo {
 .formControl input {
     padding-left: 0.5em;
     box-sizing: border-box;
+}
+
+button.backButton {
+    width: 70px;
+    padding-left: 0em;
+    position: absolute;
+    right: 17.5em;
+    margin: 0;
+    top: 1.8em;
+    background-color: Transparent;
+    border: none;
+    outline:none;
+}
+
+button.backButton > img {
+    height: 90%;
 }

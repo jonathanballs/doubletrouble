@@ -18,3 +18,9 @@ function joinGame() {
     var gameCode = document.getElementsByName("joinGameCode")[0].value;
     console.log("Creating new game with name " + name + " and code " + gameCode);
 }
+
+function showJoinCreateForm() {
+    document.getElementById("joinGameForm").style.display = "none";
+    document.getElementById("createGameForm").style.display = "none";
+    document.getElementById("joinOrCreateForm").style.display = "block";
+}

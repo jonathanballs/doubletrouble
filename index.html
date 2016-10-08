@@ -18,6 +18,7 @@
 
     <!-- CREATE GAME -->
     <div class="formControl" id="createGameForm" style="display: none">
+        <button class="backButton" onclick="showJoinCreateForm()"><img src="/static/splash/back.png"/></button>
         <label>Name</label>
         <input autofocus type="text" class="formControl" name="createGameName">
         <button onclick="createNewGame()"  class="gameButton" type="button">Create Game</button>
@@ -25,6 +26,7 @@
 
     <!-- JOIN GAME -->
     <div class="formControl" id="joinGameForm" style="display: none">
+        <button class="backButton" onclick="showJoinCreateForm()"><img src="/static/splash/back.png"/></button>
         <label>Name</label>
         <input autofocus type="text" class="formControl" name="joinGameName">
         <label>Game Code</label>
