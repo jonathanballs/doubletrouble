@@ -4,10 +4,22 @@ var units = require('./unit_list')
 
 class Player {
 
-    constructor(gameId, name, id) {
+    getState() {
+        return {
+            gameId: this.gameId,
+            name: this.name,
+            health: this.health,
+            income: this.income,
+            money: this.money,
+            lanes: this.lanes
+        }
+    }
+
+    constructor(gameId, name, id, socket) {
         this.gameId = gameId
         this.name = name
         this.id = id
+        this.socket = socket
         this.health = 100
         this.income = global.CONF.PLAYER_INCOME 
         this.money = global.CONF.PLAYER_START_MONEY

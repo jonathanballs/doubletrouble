@@ -59,7 +59,7 @@ io.on('connection', function(socket) {
     socket.on('createGame', function(data) {
         var gameCode = generateGameCode();
         var game = new Game(gameCode);
-        var player = new Player(game.id, data.playerName, socket.user_id);
+        var player = new Player(game.id, data.playerName, socket.user_id, socket);
         game.setPlayerLeft(player);
         gameManager.addGame(game);
         console.log(game);
@@ -76,12 +76,14 @@ io.on('connection', function(socket) {
             socket.emit("gameJoin", {game: null});
         }
         else {
-            var player = new Player(data.gameCode, data.playerName, socket.user_id);
+            var player = new Player(data.gameCode, data.playerName, socket.user_id, socket);
             game.setPlayerRight(player);
             socket.player = player;
             console.log("Player joined");
             console.log(game);
-            socket.emit("gameJoin", {game: game});
+            socket.emit("gameJoin", {game: game.getState()});
+            var opp = game.playerLeft.socket;
+            opp.emit("gameJoin", {game: game.getState()});
         }
     });
 
@@ -97,7 +99,7 @@ io.on('connection', function(socket) {
     // update gamestate periodically
     function updateGameState(socket) {
         if (this.player)
-            socket.emit('gamestate', { gamestate: gameManager.getGame(socket.player.gameId) } )
+            socket.emit('gamestate', { gamestate: gameManager.getGame(socket.player.gameId).getState() } )
     }
     setInterval(updateGameState, 1000 / 5, socket)
 

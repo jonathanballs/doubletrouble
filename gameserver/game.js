@@ -25,6 +25,15 @@ class Game {
         this.id = id
     }
 
+    getState() {
+        var obj = {
+            id: this.id,
+            playerLeft: this.playerLeft.getState(),
+            playerRight: this.playerRight.getState(),
+        }
+        return obj;
+    }
+
     setPlayerLeft(playerLeft) {
         this.playerLeft = playerLeft
     }
