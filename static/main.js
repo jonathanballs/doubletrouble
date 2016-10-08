@@ -93,6 +93,7 @@ function setup()
         console.log("train wizard");
         spawn(0,2);
     };
+    gameLoop();
 }
 function makeHud()
 {
@@ -226,7 +227,6 @@ function makeCastle(xInit)
 }
 
 //GAME LOOP GOODNESS
-gameLoop();
 function gameLoop()
 {
     requestAnimationFrame(gameLoop);
@@ -238,6 +238,12 @@ function gameLoop()
             stage.removeChild(unit);
             console.log("unit destroyed in order to free memory");
         } });
+    //update Money counter
+    hud[1].text = "Moneyz:";
+    if(player == 0){ hud[1].text += gamestate.playerLeft.money;}
+    else{hud[1].text += gamestate.playerRight.money;}
+
+    draw();
 
 }
 function spawn(pos,unit)
@@ -252,6 +258,29 @@ function spawn(pos,unit)
         //units.push(makeSprite(spawn_pos[2],spawn_pos[3], 'units/'+spawns[unit]+ (player + 1)));
     }
     socket.emit('spawn', { lane:pos, type:spawns[unit]});
+}
+function draw()
+{
+    if(player == 0)
+    {
+        var lanes = gamestate.playerLeft.lanes;
+    }else{
+        var lanes = gamestate.playerRight.lanes;
+    }
+    units.forEach(function(unit) {
+            units.splice(units.indexOf(unit),1);
+            stage.removeChild(unit);
+            })
+    lanes[0].units.forEach(function(unit)
+            {
+                if(player == 0)
+                {
+                units.push(makeSprite(spawn_pos[0]+(window.innerWidth*(unit.progress / 100 )),spawn_pos[1],"units/soldier1"));
+                }else{
+                units.push(makeSprite(spawn_pos[0]-(spawn_pos[0]*(unit.progress / 100 )),spawn_pos[1],"units/soldier1"));
+                }
+            });
+
 }
 function keyboard(keyCode) {
   var key = {};
@@ -289,11 +318,30 @@ function keyboard(keyCode) {
   );
   return key;
 }
+// function resizeStage()
+// {
+//     buttons.forEach(function(bt){bt.destroy();});
+//     var init = new Array();
+//     if (player == 0)
+//     {
+//         init[0] =  window.innerWidth*0.2;
+//     }else{
+//         init[0] =  window.innerWidth*0.8;
+//     }
+//     init[1] = makeCastle(init[0]);
+//     //make castle and assign the initial x
+//     makeRoads(init);    
+//     makeHuts(init);
+//     // makeHud(); 
+//     // makeButtons();
+
+//     buttons.forEach(function(item){stage.addChild(item)});
+// }
 
 //Socket.io stuff
 socket.on('gamestate', function(data)
         {
-            gamestate = data;
-            console.log(gamestate);
+            gamestate = data.gamestate;
+            console.log(gamestate.playerLeft.lanes[0]);
         });
 

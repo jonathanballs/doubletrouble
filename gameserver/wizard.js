@@ -8,6 +8,7 @@ class Wizard extends Unit {
     getUnitTypeMovingStatus() { return true }
     getUnitTypeStart() { return global.CONF.WIZARD_START }
     getUnitTypeCost() { return global.CONF.WIZARD_COST }
+    getUnitType() { return 'wizard' }
 }
 
 module.exports = Wizard
