@@ -220,7 +220,7 @@ function gameLoop()
     //destroying units offscreen
     units.forEach(function(unit) { if(unit.x > innerWidth +128) 
         { 
-             units.splice(units.indexOf(unit),1);
+            units.splice(units.indexOf(unit),1);
             stage.removeChild(unit);
             console.log("unit destroyed in order to free memory");
         } });
