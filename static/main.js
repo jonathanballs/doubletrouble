@@ -2,6 +2,8 @@
 var player = 0;
 var units = new Array();
 var spawn_pos = new Array();
+var hud = new Array();
+var buttons = new Array();
 
 var renderer = PIXI.autoDetectRenderer(window.innerWidth,window.innerHeight, {antialias:false, transparent:false, resolution:1});
 var stage = new PIXI.Container();
@@ -31,6 +33,10 @@ PIXI.loader
     .add("static/assets/main/units/wizard2.png")
     .add("static/assets/main/units/worker1.png")
     .add("static/assets/main/units/worker2.png")
+    .add("static/assets/main/details/detail1.png")
+    .add("static/assets/main/details/detail2.png")
+    .add("static/assets/main/details/detail3.png")
+    .add("static/assets/main/details/detail4.png")
     .load(setup);
 }
 
@@ -50,7 +56,6 @@ function setup()
         }
     }
     //make BG dynamically
-    //make map for left side
     var init = new Array();
     if (player == 0)
     {
@@ -62,9 +67,66 @@ function setup()
     //make castle and assign the initial x
     makeRoads(init);    
     makeHuts(init);
+    
+    hud[1] = new PIXI.Text("Moneyz:1000", {font:"20px sans-serif", fill:"black"});
+    hud[1].position.set(20,20);
+    hud[0] = new PIXI.Graphics();
+    hud[0].beginFill("0xdddddd");
+    hud[0].drawRect(0,0,window.innerWidth * 0.18, window.innerHeight);
+    hud[0].endFill();
+    hud[0].alpha = 0.4;
+    hud.forEach(function(item){stage.addChild(item)});
+
+    makeButtons();
+    buttons.forEach(function(item){stage.addChild(item)});
+    
 
     //render
     renderer.render(stage);
+    //Keyboard handling 
+    var keyQ = keyboard(81);
+    var keyW = keyboard(87);
+    var keyE = keyboard(69);
+    // var keyR = keyboard(82);
+    keyQ.press = function() {
+        console.log("train Worker");
+        spawn(0,0);
+    };
+    keyW.press = function() {
+        console.log("train soldier");
+        spawn(0,1);
+    };
+    keyE.press = function() {
+        console.log("train wizard");
+        spawn(0,2);
+    };
+}
+function makeButtons()
+{
+    buttons[2] = new PIXI.Text("Q", {font:"30px sans-serif", fill:"black"});
+    buttons[2].position.set(35,85);
+    buttons[1] = makeSprite(20, 70, 'units/worker' + (player +1));
+    buttons[0] = new PIXI.Graphics();
+    buttons[0].beginFill("0xdddddd");
+    buttons[0].drawRect(20,70,128,128);
+    buttons[0].endFill();
+    buttons[0].alpha = 0.35;
+    buttons[5] = new PIXI.Text("W", {font:"30px sans-serif", fill:"black"});
+    buttons[5].position.set(35,223);
+    buttons[4] = makeSprite(20, 208, 'units/soldier' + (player +1));
+    buttons[3] = new PIXI.Graphics();
+    buttons[3].beginFill("0xdddddd");
+    buttons[3].drawRect(20,208,128,128);
+    buttons[3].endFill();
+    buttons[3].alpha = 0.35;
+    buttons[8] = new PIXI.Text("E", {font:"30px sans-serif", fill:"black"});
+    buttons[8].position.set(35,356);
+    buttons[7] = makeSprite(20, 346, 'units/wizard' + (player +1));
+    buttons[6] = new PIXI.Graphics();
+    buttons[6].beginFill("0xdddddd");
+    buttons[6].drawRect(20,346,128,128);
+    buttons[6].endFill();
+    buttons[6].alpha = 0.35;
 }
 function makeSprite(x, y, sprite)
 {
@@ -87,10 +149,10 @@ function makeHuts(init)
         spawn_pos[3] = huts[1].y - 43; 
     }else{
         huts.push(makeSprite(init[0]-384+32,init[1]-256+32,"house"));
-        spawn_pos[0] = huts[0].x; 
+        spawn_pos[0] = huts[0].x - 30; 
         spawn_pos[1] = huts[0].y - 43; 
         huts.push(makeSprite(init[0]-384+32,init[1]+256+32,"house"));
-        spawn_pos[2] = huts[1].x; 
+        spawn_pos[2] = huts[1].x - 30; 
         spawn_pos[3] = huts[1].y - 43; 
     }
 }
@@ -117,7 +179,7 @@ function makeRoads(init)
         roads.push(makeSprite(init[0]-384,init[1]+128,"tbTile"));
         roads.push(makeSprite(init[0]-384,init[1]+256,"ltTile"));
         roads.push(makeSprite(init[0]-384,init[1]-256,"lbTile"));
-        for(i=0;i<Math.ceil((window.innerWidth - init[0]+512)/128);i++)
+        for(i=0;i<Math.ceil((window.innerWidth - init[0]+800)/128);i++)
         {
             roads.push(makeSprite(init[0]-512-(i*128),init[1]+256,"lrTile"));
             roads.push(makeSprite(init[0]-512-(i*128),init[1]-256,"lrTile"));
@@ -155,10 +217,62 @@ function gameLoop()
 {
     requestAnimationFrame(gameLoop);
     renderer.render(stage);
-    // units[0].x = units[0].x + 1;
-    units.forEach(function(unit) { unit.x = unit.x + 1; });
+    //destroying units offscreen
+    units.forEach(function(unit) { if(unit.x > innerWidth +128) 
+        { 
+             units.splice(units.indexOf(unit),1);
+            stage.removeChild(unit);
+            console.log("unit destroyed in order to free memory");
+        } });
+    units.forEach(function(unit) { unit.x++});
+
 }
-function spawn()
+function spawn(pos,unit)
 {
-    units.push(makeSprite(spawn_pos[0],spawn_pos[1], 'units/worker1'));
+    var spawns = ['worker', 'soldier', 'wizard'];
+    if (pos == 0)
+    {
+        units.push(makeSprite(spawn_pos[0],spawn_pos[1], 'units/'+spawns[unit]+ (player + 1)));
+    }
+    else
+    {
+        units.push(makeSprite(spawn_pos[2],spawn_pos[3], 'units/'+spawns[unit]+ (player + 1)));
+    }
+    
+}
+function keyboard(keyCode) {
+  var key = {};
+  key.code = keyCode;
+  key.isDown = false;
+  key.isUp = true;
+  key.press = undefined;
+  key.release = undefined;
+  //The `downHandler`
+  key.downHandler = function(event) {
+    if (event.keyCode === key.code) {
+      if (key.isUp && key.press) key.press();
+      key.isDown = true;
+      key.isUp = false;
+    }
+    event.preventDefault();
+  };
+
+  //The `upHandler`
+  key.upHandler = function(event) {
+    if (event.keyCode === key.code) {
+      if (key.isDown && key.release) key.release();
+      key.isDown = false;
+      key.isUp = true;
+    }
+    event.preventDefault();
+  };
+
+  //Attach event listeners
+  window.addEventListener(
+    "keydown", key.downHandler.bind(key), false
+  );
+  window.addEventListener(
+    "keyup", key.upHandler.bind(key), false
+  );
+  return key;
 }
