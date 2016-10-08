@@ -2,8 +2,6 @@
 var lane = require('./lane')
 var units = require('./unit_list')
 
-var NUM_LANES = 2
-
 class Player {
 
     constructor(game, name, id) {
@@ -13,7 +11,7 @@ class Player {
         this.health = 100
         this.income = 1 
         this.money = 5
-        this.lanes = Array(NUM_LANES).fill().map((_, i) => {
+        this.lanes = Array(process.env.NUM_LANES).fill().map((_, i) => {
             return new lane(i)
         })
     }
