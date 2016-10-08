@@ -21,8 +21,13 @@ module.exports = class Manager {
         setInterval(this.tick, 1000 * (1 / global.CONF.TICKS_PER_SECOND), this)
         return
     }
+
     addGame(game) {
         this.games.push(game)
+    }
+
+    getGame(gameId) {
+        _.find(this.games, (game) => { return game.id == gameId })
     }
 
 }
