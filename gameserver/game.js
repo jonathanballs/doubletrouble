@@ -14,7 +14,7 @@ var detectUnitCollisions = function(lanes){
         var u1 = _.max(lanes[0].units, (unit) => { return unit.progress })
         var u2 = _.max(lanes[1].units, (unit) => { return unit.progress })
         // compute combined progress to detect collision (current progress + speed)
-        if (u1.progress + u1.speed + u2.progress + u2.speed >= global.CONF.LENGTH_LANES) {
+        if (u1.progress + (u1.speed/global.CONF.TICKS_PER_SECOND) + u2.progress + (u2.speed/global.CONF.TICKS_PER_SECOND) >= global.CONF.LENGTH_LANES) {
             u1.moving = false
             u2.moving = false
             var collisionPoint = (u1.progress + global.CONF.LENGTH_LANES - u2.progress) / 2
@@ -52,6 +52,7 @@ class Game {
 
     constructor(id) {
         this.id = id
+        this.active = true
     }
 
     getState() {
@@ -85,6 +86,10 @@ class Game {
                 detectUnitCollisions([players[0].lanes[i],players[1].lanes[i]])
                 detectHouseCollisions([players[0].lanes[i],players[1].lanes[i]])
                 lane.killUnits()
+                if (lane.health <= 0) {
+                    lane.active = false
+                    // kill the person here
+                }
             })
             players.forEach((player) => {
                 player.moveUnits() 

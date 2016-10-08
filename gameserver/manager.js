@@ -24,6 +24,10 @@ module.exports = class Manager {
         this.games.push(game)
     }
 
+    killGames() {
+        this.games = _.filter(this.games, (game) => { return !game.active })
+    }
+
     getGame(gameId) {
         gameId = gameId.toUpperCase();
         for(var i = 0; i<this.games.length; i++) {

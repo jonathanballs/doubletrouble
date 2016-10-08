@@ -1,5 +1,6 @@
 //setup
-var player = 0;
+var playerSide = 0
+var player;
 var gamestate;
 var units = new Array();
 var spawn_pos = new Array();
@@ -10,7 +11,7 @@ var stage = new PIXI.Container();
 //start(0);
 function start(input)
 {
-    player = input;
+    playerSide = input;
     var bodyRef = document.body;
     bodyRef.innerHTML = "";
     document.body.appendChild(renderer.view);
@@ -44,6 +45,7 @@ function start(input)
 
 function setup()
 {
+    // Generate Background automatically
     var tile = new Array();
     for(i=0;i<Math.ceil(window.innerHeight/64);i++)
     {
@@ -57,9 +59,9 @@ function setup()
             stage.addChild(tile[tile.length - 1]);
         }
     }
-    //make BG dynamically
+
     var init = new Array();
-    if (player == 0)
+    if (playerSide == 0)
     {
         init[0] =  window.innerWidth*0.2;
     }else{
@@ -97,7 +99,7 @@ function setup()
 }
 function makeHud()
 {
-    if(player == 0)
+    if(playerSide == 0)
     {
         hud[1] = new PIXI.Text("Moneyz:1000", {font:"20px sans-serif", fill:"black"});
         hud[1].position.set(20,20);
@@ -129,7 +131,7 @@ function makeButton(sprite)
 {
     var bts = ['Q','W','E','R','T']
     var xDef = 20;
-    if(player == 1)
+    if(playerSide == 1)
     {
         xDef = window.innerWidth - 148;
     }
@@ -139,7 +141,7 @@ function makeButton(sprite)
     buttons[buttons.length -1].drawRect(xDef,70 +(148*buttonCount),128,128);
     buttons[buttons.length -1].endFill();
     buttons[buttons.length -1].alpha = 0.35;
-    buttons.push(makeSprite(xDef, 70+(148*buttonCount), 'units/'+ sprite + (player +1)));
+    buttons.push(makeSprite(xDef, 70+(148*buttonCount), 'units/'+ sprite + (playerSide +1)));
     buttons.push(new PIXI.Text(bts[buttonCount], {font:"30px sans-serif", fill:"black"}));
     buttons[buttons.length -1].position.set(xDef+15,85+(148*buttonCount));
 }
@@ -154,7 +156,7 @@ function makeSprite(x, y, sprite)
 function makeHuts(init)
 {
     var huts = new Array();
-    if(player == 0)
+    if(playerSide == 0)
     {
         huts.push(makeSprite(init[0]+256+32,init[1]-256+32,"house"));
         spawn_pos[0] = huts[0].x; 
@@ -174,7 +176,7 @@ function makeHuts(init)
 function makeRoads(init)
 {
     var roads = new Array();
-    if(player == 0)
+    if(playerSide == 0)
     {
         roads.push(makeSprite(init[0]+128,init[1],"lrTile"));
         roads.push(makeSprite(init[0]+256,init[1],"lSplit"));
@@ -207,7 +209,7 @@ function makeCastle(xInit)
     var castle = new Array(2);
     castle[0] = new PIXI.Sprite(PIXI.loader.resources["static/assets/main/castle1.png"].texture);
     castle[0].y = center + (castle[0].height/2) - 64;
-    if(player ==0)
+    if(playerSide ==0)
     {
         castle[0].x = xInit + 5; 
     }else{
@@ -215,7 +217,7 @@ function makeCastle(xInit)
     }
     castle[1] = new PIXI.Sprite(PIXI.loader.resources["static/assets/main/castle2.png"].texture);
     castle[1].y = castle[0].y - castle[1].height; 
-    if(player == 0)
+    if(playerSide == 0)
     {
         castle[1].x = xInit + 5 ;
     }else{
@@ -240,7 +242,7 @@ function gameLoop()
         } });
     //update Money counter
     hud[1].text = "Moneyz:";
-    if(player == 0){ hud[1].text += Math.floor(gamestate.playerLeft.money);}
+    if(playerSide == 0){ hud[1].text += Math.floor(gamestate.playerLeft.money);}
     else{hud[1].text += Math.floor(gamestate.playerRight.money);}
 
     draw();
@@ -259,7 +261,7 @@ function spawn(pos,unit)
 }
 function draw()
 {
-    if(player == 0)
+    if(playerSide == 0)
     {
         var lanes = gamestate.playerLeft.lanes;
         var opLanes = gamestate.playerRight.lanes;
@@ -275,21 +277,42 @@ function draw()
             })
     lanes[0].units.forEach(function(unit)
             {
-                if(player == 0)
+                var ends = [renderer.width,spawn_pos[0]];
+                if(playerSide == 0)
                 {
-                units.push(makeSprite(spawn_pos[0]+((window.innerWidth+128)*(unit.progress/100)),spawn_pos[1],"units/"+ unit.type +(player+1)));
+                    var spawn = [spawn_pos[0]+64,renderer.width];
+                    if(unit.progress < 50)
+                    {
+                        units.push(makeSprite(spawn[0] + (ends[0]-spawn[0])*(unit.progress/50),spawn_pos[1]+64,"units/"+ unit.type +(playerSide+1)));
+                        units[units.length-1].anchor.set(0.5,0.5);
+                    }
                 }else{
-                units.push(makeSprite(spawn_pos[0]-(spawn_pos[0]*(unit.progress / 100 )),spawn_pos[1],"units/"+unit.type + (player+1)));
+                    var spawn = [spawn_pos[0],renderer.width];
+                    if(unit.progress <50)
+                    {
+                        units.push(makeSprite(spawn[0]-(spawn[0])*(unit.progress / 50),spawn_pos[1]+64,"units/" + unit.type + (playerSide+1)));
+                        units[units.length-1].anchor.set(0.5,0.5);
+                    }
                 }
             });
     opLanes[0].units.forEach(function(unit)
             {
-                if(player == 0)
+                var spawn = [spawn_pos[0]+128,renderer.width];
+                var ends = [renderer.width,spawn_pos[0]];
+                if(playerSide == 0)
                 {
-                    units.push(makeSprite(window.innerWidth-((window.innerWidth - spawn_pos[0])*(unit.progress/100)),spawn_pos[1],"units/"+ unit.type +oPlayer));
+                    if(unit.progress > 50)
+                    {
+                        units.push(makeSprite(spawn[1] - (spawn[1]-ends[1])*((unit.progress - 50)/50),spawn_pos[1]+64,"units/"+ unit.type +oPlayer));
+                        units[units.length-1].anchor.set(0.5,0.5);
+                    }
                 }else{
-                    units.push(makeSprite(spawn_pos[0]*(unit.progress/100),spawn_pos[1],"units/"+ unit.type +oPlayer));
-                    
+                    if(unit.progress > 50)
+                    {
+                        console.log(unit.x);
+                        units.push(makeSprite((ends[1])*((unit.progress-50)/50),spawn_pos[1]+64,"units/"+ unit.type +oPlayer));
+                        units[units.length-1].anchor.set(0.5,0.5);
+                    }
                 }
             })
 
@@ -354,5 +377,6 @@ function keyboard(keyCode) {
 socket.on('gamestate', function(data)
         {
             gamestate = data.gamestate;
+            player =  playerSide ? data.gamestate.playerRight : data.gamestate.playerLeft;
         });
 
