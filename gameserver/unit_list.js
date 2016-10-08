@@ -1,4 +1,4 @@
 module.exports = {
-    peasant: require('./peasant'),
-    knight: require('./knight')
+    worker: require('./worker'),
+    soldier: require('./soldier')
 }
