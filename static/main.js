@@ -1,10 +1,10 @@
 //setup
 var player = 0;
+var gamestate;
 var units = new Array();
 var spawn_pos = new Array();
 var hud = new Array();
 var buttons = new Array();
-
 var renderer = PIXI.autoDetectRenderer(window.innerWidth,window.innerHeight, {antialias:false, transparent:false, resolution:1});
 var stage = new PIXI.Container();
 start();
@@ -68,19 +68,10 @@ function setup()
     //make castle and assign the initial x
     makeRoads(init);    
     makeHuts(init);
-    
-    hud[1] = new PIXI.Text("Moneyz:1000", {font:"20px sans-serif", fill:"black"});
-    hud[1].position.set(20,20);
-    hud[0] = new PIXI.Graphics();
-    hud[0].beginFill("0xdddddd");
-    hud[0].drawRect(0,0,window.innerWidth * 0.18, window.innerHeight);
-    hud[0].endFill();
-    hud[0].alpha = 0.4;
-    hud.forEach(function(item){stage.addChild(item)});
-
+    makeHud(); 
     makeButtons();
+
     buttons.forEach(function(item){stage.addChild(item)});
-    
 
     //render
     renderer.render(stage);
@@ -101,6 +92,31 @@ function setup()
         console.log("train wizard");
         spawn(0,2);
     };
+}
+function makeHud()
+{
+    if(player == 0)
+    {
+        hud[1] = new PIXI.Text("Moneyz:1000", {font:"20px sans-serif", fill:"black"});
+        hud[1].position.set(20,20);
+        hud[0] = new PIXI.Graphics();
+        hud[0].beginFill("0xdddddd");
+        hud[0].drawRect(0,0,window.innerWidth * 0.18, window.innerHeight);
+        hud[0].endFill();
+        hud[0].alpha = 0.4;
+        hud.forEach(function(item){stage.addChild(item)});
+    }else{
+        hud[1] = new PIXI.Text("Moneyz:1000", {font:"20px sans-serif", fill:"black"});
+        hud[1].position.set(window.innerWidth -hud[1].width - 20,20);
+        hud[0] = new PIXI.Graphics();
+        hud[0].beginFill("0xdddddd");
+        hud[0].drawRect(window.innerWidth - (window.innerWidth * 0.18),window.innerWidth * 0.18, window.innerHeight);
+        hud[0].endFill();
+        hud[0].alpha = 0.4;
+        hud.forEach(function(item){stage.addChild(item)});
+
+    }
+    
 }
 function makeButtons()
 {
@@ -277,3 +293,11 @@ function keyboard(keyCode) {
   );
   return key;
 }
+
+//Socket.io stuff
+socket.on('gamestate', function(data)
+        {
+            gamestate = data;
+            console.log(gamestate);
+        });
+
