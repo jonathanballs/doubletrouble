@@ -13,7 +13,6 @@ module.exports = class Manager {
         self.games.forEach((game) => {
             game.tick()
         })
-        //console.log(self.games)
     }
 
     play() {

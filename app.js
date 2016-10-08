@@ -59,7 +59,7 @@ io.on('connection', function(socket) {
     socket.on('createGame', function(data) {
         var gameCode = generateGameCode();
         var game = new Game(gameCode);
-        var player = new Player(game.id, data.playerName, socket.user_id, socket);
+        var player = new Player(game.id, data.playerName, socket.user_id, socket, 'Left');
         game.setPlayerLeft(player);
         gameManager.addGame(game);
         console.log(game);
@@ -76,7 +76,7 @@ io.on('connection', function(socket) {
             socket.emit("gameJoin", {game: null});
         }
         else {
-            var player = new Player(data.gameCode, data.playerName, socket.user_id, socket);
+            var player = new Player(data.gameCode, data.playerName, socket.user_id, socket, 'Right');
             game.setPlayerRight(player);
             socket.player = player;
             console.log("Player joined");
@@ -96,6 +96,13 @@ io.on('connection', function(socket) {
     socket.on('disconnect', function() {
         console.log('Player ' + socket.userid + ' disconnected');
     });
+
+    // Handle all the game input
+    socket.on('spawn', function(options) {
+        var player = socket.player.getState()
+        var game = gameManager.getGame(player.gameId)
+        game["player"+player.side].spawnUnit(options.lane, options.type)
+    })
 
     // update gamestate periodically
     function updateGameState(socket) {
