@@ -11,6 +11,7 @@ class Player {
             name: this.name,
             health: this.health,
             income: this.income,
+            villagers: this.villagers,
             money: this.money,
             lanes: this.lanes
         }
@@ -24,6 +25,7 @@ class Player {
         this.socket = socket
         this.health = 100
         this.income = global.CONF.PLAYER_INCOME 
+        this.villagers = [0,0] 
         this.money = global.CONF.PLAYER_START_MONEY
         this.lanes = Array(global.CONF.NUM_LANES).fill().map((_, i) => {
             return new lane(i)
@@ -36,7 +38,12 @@ class Player {
         var unitCost = unit.getUnitTypeCost()
         if (unitCost <= this.money) {
             this.money -= unitCost
-            this.lanes[lane].addUnit(new units[type]())
+            if(type != 'worker')
+            {
+                this.lanes[lane].addUnit(new units[type]())
+            }else{
+                this.villagers[lane]++;
+            }
          } else { console.log('insufficient funds') }
     }
 
