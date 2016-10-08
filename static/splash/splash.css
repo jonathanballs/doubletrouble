@@ -45,9 +45,10 @@ img.logo {
 p.gameCodeShower {
     color: #dddddd;
     text-align: center;
+    height: auto;
 }
 p.gameCode {
-    font-size: 3em;
+    font-size: 4em;
     color: #dddddd;
     text-align: center;
 }

@@ -24,8 +24,13 @@ socket.on("newGameCode", function(data) {
 function joinGame() {
     var name = document.getElementsByName("joinGameName")[0].value;
     var gameCode = document.getElementsByName("joinGameCode")[0].value;
-    console.log("Creating new game with name " + name + " and code " + gameCode);
+    console.log("Joining game with name " + name + " and code " + gameCode);
+    socket.emit("joinGame", {playerName: name, gameCode: gameCode});
 }
+
+socket.on("gameJoin", function(data) {
+    console.log(data);
+});
 
 function showJoinCreateForm() {
     document.getElementById("joinGameForm").style.display = "none";
