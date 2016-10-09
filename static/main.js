@@ -496,7 +496,6 @@ function draw()
                 }else{
                     if(unit.progress > 50)
                     {
-                        console.log(unit.x);
                         units.push(makeSprite((ends[1])*((unit.progress-50)/50),spawn_pos[3]+64,"units/"+ unit.type +oPlayer));
                         units[units.length-1].anchor.set(0.5,0.5);
                     }
