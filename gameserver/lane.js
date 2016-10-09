@@ -27,7 +27,7 @@ class Lane {
             if(this.villagers < 0)
             {
                 this.villagers = 0
-                takeDamage(d - initVillagers)
+                this.takeDamage(d - initVillagers)
             }
         }else{
             this.health -= d
