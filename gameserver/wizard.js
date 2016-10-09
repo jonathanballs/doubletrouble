@@ -8,6 +8,7 @@ class Wizard extends Unit {
     getUnitTypeMovingStatus() { return true }
     getUnitTypeStart() { return global.CONF.WIZARD_START }
     getUnitTypeCost() { return global.CONF.WIZARD_COST }
+    getUnitTypeHealth() { return global.CONF.WIZARD_HEALTH }
     getUnitType() { return 'wizard' }
 }
 

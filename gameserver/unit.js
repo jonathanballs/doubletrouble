@@ -8,7 +8,7 @@ class Unit {
         this.moving = this.getUnitTypeMovingStatus()
         this.type = this.getUnitType()
         this.damage = this.getUnitTypeDamage()
-        this.health = 1
+        this.health = this.getUnitTypeHealth() 
     }
 
     move(delta) {

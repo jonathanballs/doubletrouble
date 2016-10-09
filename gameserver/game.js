@@ -20,7 +20,10 @@ var detectUnitCollisions = function(lanes){
             var collisionPoint = (u1.progress + global.CONF.LENGTH_LANES - u2.progress) / 2
             u1.progress = collisionPoint
             u2.progress = global.CONF.LENGTH_LANES - collisionPoint
+
             calculateDamages(u1,u2)
+            if(u1.health>0) { u1.moving = true }
+            if(u2.health>0) { u2.moving = true }
         }
     } 
 }
