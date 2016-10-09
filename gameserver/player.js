@@ -25,7 +25,7 @@ class Player {
         this.socket = socket
         this.health = 100
         this.income = global.CONF.PLAYER_INCOME 
-        this.villagers = [0,0] 
+        this.villagers = [1,1] 
         this.money = global.CONF.PLAYER_START_MONEY
         this.lanes = Array(global.CONF.NUM_LANES).fill().map((_, i) => {
             return new lane(i)
@@ -61,7 +61,7 @@ class Player {
 
     getPaid() {
         // income per second using ticks per second
-        this.money += this.income / global.CONF.TICKS_PER_SECOND
+        this.money += this.income*(this.villagers[0]+this.villagers[1]) / global.CONF.TICKS_PER_SECOND
     }
 }
 

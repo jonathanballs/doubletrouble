@@ -83,7 +83,7 @@ class Game {
         if (players.length != 2) { return }
         players.forEach((player) => {
             player.lanes.forEach((lane, i) => {
-                console.log(player.side + ': ' + lane.health) 
+                // console.log(player.side + ': ' + lane.health) 
                 detectUnitCollisions([players[0].lanes[i],players[1].lanes[i]])
                 detectHouseCollisions([players[0].lanes[i],players[1].lanes[i]])
                 lane.killUnits()

@@ -82,10 +82,6 @@ io.on('connection', function(socket) {
             socket.emit("gameJoin", { game: game.getState() });
             var oppsocket = game.playerLeft.socket;
             oppsocket.emit("gameJoin", {game: game.getState()});
-
-            // Initial money just for hacking
-            player.money = 500;
-            game.playerLeft.money = 500;
         }
     });
 
@@ -107,7 +103,7 @@ io.on('connection', function(socket) {
     function updateGameState(socket) {
         if (socket.player) {
             var game = gameManager.getGame(socket.player.getState().gameId)
-            console.log(game)
+            // console.log(game)
             if (!game.active) { 
                 console.log(game.loser_side + ' loses')
                 socket.emit('gameend', { winner: game.winner_side }) 

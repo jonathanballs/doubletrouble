@@ -20,6 +20,7 @@ class Lane {
 
     takeDamage(d) {
         this.health -= d
+        console.log(this.parent);
     }
 }
 
