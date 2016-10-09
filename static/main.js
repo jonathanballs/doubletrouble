@@ -9,6 +9,7 @@ var laneInfo1;
 var laneInfo2;
 var renderer = PIXI.autoDetectRenderer(window.innerWidth,window.innerHeight, {antialias:false, transparent:false, resolution:1});
 var stage = new PIXI.Container();
+var laneIndexSelected = 0;
 
 // Call this to start the game
 function start(pside)
@@ -44,6 +45,7 @@ function start(pside)
         .add("static/assets/main/details/detail4.png")
         .add("static/assets/main/coin.png")
         .add("static/assets/main/heart.png")
+        .add("static/assets/main/arrow.png")
         .load(setup);
 }
 
@@ -95,6 +97,8 @@ function setup()
     var keyQ = keyboard(81);
     var keyW = keyboard(87);
     var keyE = keyboard(69);
+    var keyUp = keyboard(38);
+    var keyDown = keyboard(40);
     // var keyR = keyboard(82);
     keyQ.press = function() {
         console.log("train Worker");
@@ -107,6 +111,14 @@ function setup()
     keyE.press = function() {
         console.log("train wizard");
         spawn(1,2);
+    };
+    keyDown.press = function() {
+        if (laneIndexSelected == 0)
+            laneIndexSelected = 1;
+    };
+    keyUp.press = function() {
+        if (laneIndexSelected == 1)
+            laneIndexSelected = 0;
     };
     gameLoop();
 }
@@ -149,11 +161,20 @@ class LaneInfo {
         this.workerText.anchor.set(0.5, 0.5);
         this.workerText.position.set(this.workerIcon.position.x + 2, // slight offset
                 this.workerIcon.position.y + this.heartIcon.height);
+
+        // Lane selection arrow
+        this.arrowIcon = makeSprite(0, 0, "arrow");
+        this.arrowIcon.anchor.set(0.5, 0.5);
+        this.arrowIcon.position.set(iconStartX + (4*iconPadding), iconStartY + 48);
+        this.arrowIcon.height = iconHeight * 1.5;
+        this.arrowIcon.width = iconHeight * 1.5;
+        this.arrowIcon.rotation = playerSide ? 3.14159 : 0;
     }
 
     update() {
         this.workerText.text = player.lanes[this.hutNum].villagers;
         this.heartText.text = player.lanes[this.hutNum].health;
+        this.arrowIcon.visible = laneIndexSelected == this.hutNum;
     }
 
     paint() {
@@ -352,13 +373,7 @@ function gameLoop()
 function spawn(pos,unit)
 {
     var spawns = ['worker', 'soldier', 'wizard'];
-    if (pos == 0)
-    {
-    }
-    else
-    {
-    }
-    socket.emit('spawn', { lane:pos, type:spawns[unit]});
+    socket.emit('spawn', { lane:laneIndexSelected, type:spawns[unit]});
 }
 function draw()
 {
