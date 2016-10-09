@@ -1,7 +1,0 @@
-[Unit]
-Description=Start the doubletrouble server
-
-[Service]
-Type=simple
-ExecStart=/usr/bin/nodejs /home/trouble/doubletrouble/app.js
-
