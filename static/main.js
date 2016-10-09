@@ -83,9 +83,9 @@ function setup()
 
     // Create Hud
     hud = new Hud();
-    hud.addUnitButton("worker", "Q", 15);
-    hud.addUnitButton("soldier", "W", 27);
-    hud.addUnitButton("wizard", "E", 50);
+    hud.addUnitButton("worker", "Q", 50);
+    hud.addUnitButton("soldier", "W", 25);
+    hud.addUnitButton("wizard", "E", 250);
     hud.paint();
 
     // Create lane information
