@@ -97,6 +97,8 @@ function setup()
     var keyQ = keyboard(81);
     var keyW = keyboard(87);
     var keyE = keyboard(69);
+    var keyJ = keyboard(74);
+    var keyK = keyboard(75);
     var keyUp = keyboard(38);
     var keyDown = keyboard(40);
     // var keyR = keyboard(82);
@@ -112,10 +114,12 @@ function setup()
         console.log("train wizard");
         spawn(1,2);
     };
+    keyJ.press =
     keyDown.press = function() {
         if (laneIndexSelected == 0)
             laneIndexSelected = 1;
     };
+    keyK.press =
     keyUp.press = function() {
         if (laneIndexSelected == 1)
             laneIndexSelected = 0;
