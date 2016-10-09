@@ -5,6 +5,8 @@ var gamestate;
 var units = new Array();
 var spawn_pos = new Array();
 var hud = new Array();
+var laneInfo1;
+var laneInfo2;
 var renderer = PIXI.autoDetectRenderer(window.innerWidth,window.innerHeight, {antialias:false, transparent:false, resolution:1});
 var stage = new PIXI.Container();
 
@@ -41,6 +43,7 @@ function start(pside)
         .add("static/assets/main/details/detail3.png")
         .add("static/assets/main/details/detail4.png")
         .add("static/assets/main/coin.png")
+        .add("static/assets/main/heart.png")
         .load(setup);
 }
 
@@ -72,11 +75,19 @@ function setup()
     //make castle and assign the initial x
     makeRoads(init);    
     makeHuts(init);
+
+    // Create Hud
     hud = new Hud();
     hud.addUnitButton("worker", "Q", 15);
     hud.addUnitButton("soldier", "W", 27);
     hud.addUnitButton("wizard", "E", 50);
     hud.paint();
+
+    // Create lane information
+    laneInfo0 = new LaneInfo(0, spawn_pos[0], spawn_pos[1]);
+    laneInfo0.paint();
+    laneInfo1 = new LaneInfo(1, spawn_pos[2], spawn_pos[3]);
+    laneInfo1.paint();
 
     //render
     renderer.render(stage);
@@ -100,6 +111,60 @@ function setup()
     gameLoop();
 }
 
+
+class LaneInfo {
+    constructor(hutNum, hutX, hutY) {
+        this.hutNum = hutNum;
+
+        var iconHeight = 32
+        var iconPadding = playerSide ? 40 : -40;
+        var iconStartX = hutX + (playerSide ? 84: 0);
+        var iconStartY = hutY + 24;
+
+        if (playerSide)
+            hutX += 30;
+
+        // Heart icon
+        this.heartIcon = makeSprite(0, 0, "heart");
+        this.heartIcon.anchor.set(0.5, 0.5);
+        this.heartIcon.position.set(iconStartX + iconPadding, iconStartY + 48);
+        this.heartIcon.height = iconHeight;
+        this.heartIcon.width = iconHeight;
+
+        // Heart value
+        this.heartText = new PIXI.Text("0", {font:"20px sans-serif", fill:"black"});
+        this.heartText.anchor.set(0.5, 0.5);
+        this.heartText.position.set(this.heartIcon.position.x + 2, // slight offset
+                this.heartIcon.position.y + this.heartIcon.height);
+
+        // Worker icon
+        this.workerIcon = makeSprite(0, 0, "units/worker" + (playerSide + 1));
+        this.workerIcon.anchor.set(0.5, 0.5);
+        this.workerIcon.position.set(iconStartX + (2*iconPadding), iconStartY + 48);
+        this.workerIcon.height = iconHeight * 3;//Weird whitespace issue with workers
+        this.workerIcon.width = iconHeight * 3;
+
+        // Workers value
+        this.workerText = new PIXI.Text("0", {font:"20px sans-serif", fill:"black"});
+        this.workerText.anchor.set(0.5, 0.5);
+        this.workerText.position.set(this.workerIcon.position.x + 2, // slight offset
+                this.workerIcon.position.y + this.heartIcon.height);
+    }
+
+    update() {
+        this.workerText.text = player.lanes[this.hutNum].villagers;
+        this.heartText.text = player.lanes[this.hutNum].health;
+    }
+
+    paint() {
+        stage.addChild(this.heartIcon);
+        stage.addChild(this.heartText);
+        stage.addChild(this.workerIcon);
+        stage.addChild(this.workerText);
+    }
+}
+
+
 class Hud {
 
     constructor() {
@@ -121,14 +186,17 @@ class Hud {
         this.coinIcon.position.set(this.hudStartX + this.hudPadding, this.hudPadding);
         this.coinIcon.width = this.moneyCounter.height;
         this.coinIcon.height = this.moneyCounter.height;
-        this.moneyCounter.position.set(this.coinIcon.position.x + this.coinIcon.width + 10, this.coinIcon.position.y);
+        this.moneyCounter.position.set(this.coinIcon.position.x + this.coinIcon.width + 10,
+                this.coinIcon.position.y);
 
         // Buttons
         this.buttons = new Array();
     }
 
     paint() {
-        [this.background, this.coinIcon, this.moneyCounter].forEach(function(item){stage.addChild(item)});
+        [this.background, this.coinIcon, this.moneyCounter].forEach(
+                function(item){stage.addChild(item)}
+                );
         this.buttons.forEach(function(button) {
             stage.addChild(button.btn);
             stage.addChild(button.sprite);
@@ -274,7 +342,9 @@ function gameLoop()
             console.log("unit destroyed in order to free memory");
         } });
     //update Money counter
-    hud.update()
+    hud.update();
+    laneInfo0.update();
+    laneInfo1.update();
 
     draw();
 
