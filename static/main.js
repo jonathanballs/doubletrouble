@@ -1,5 +1,6 @@
 //setup
 var playerSide = 0
+var gameOverScene;
 var player;
 var gamestate;
 var units = new Array();
@@ -10,6 +11,8 @@ var laneInfo2;
 var renderer = PIXI.autoDetectRenderer(window.innerWidth,window.innerHeight, {antialias:false, transparent:false, resolution:1});
 var stage = new PIXI.Container();
 var laneIndexSelected = 0;
+var msg;
+var msg2;
 
 // Call this to start the game
 function start(pside)
@@ -124,6 +127,23 @@ function setup()
         if (laneIndexSelected == 1)
             laneIndexSelected = 0;
     };
+    msg = new PIXI.Text("Game",{font:"100px sans-serif", fill:"white"});
+    msg.x = window.innerWidth - msg.width/2 - 50;
+    if(playerSide)
+    {
+        msg.text = "Over";
+        msg.x = 50 + msg.width/2;
+    }
+    msg.anchor.set(0.5,0.5);
+    msg.y = 200;
+    msg.visible = false;
+    stage.addChild(msg);
+    msg2 = new PIXI.Text("You won",{font:"30px sans-serif", fill:"white"});
+    msg2.anchor.set(0.5,0.5);
+    msg2.x = window.innerWidth/2;
+    msg2.y = 300;
+    msg2.visible = false;
+    stage.addChild(msg2);
     gameLoop();
 }
 
@@ -349,6 +369,14 @@ function makeCastle(xInit)
     }else{
         castle[1].x = xInit - 128 -5;
     }
+    var name = new PIXI.Text(player.name,{font:"20px sans-serif", fill:"black"});
+    if(player.name == "")
+        name.text = "The Biene";
+    name.anchor.set(0.5,0.5);
+    name.x = castle[1].x + 64;
+    name.y = castle[1].y + 32;
+    
+    stage.addChild(name);
     stage.addChild(castle[0]);
     stage.addChild(castle[1]);
     return castle[0].y - 30;   
@@ -429,7 +457,6 @@ function draw()
                 }else{
                     if(unit.progress > 50)
                     {
-                        console.log(unit.x);
                         units.push(makeSprite((ends[1])*((unit.progress-50)/50),spawn_pos[1]+64,"units/"+ unit.type +oPlayer));
                         units[units.length-1].anchor.set(0.5,0.5);
                     }
@@ -513,6 +540,13 @@ function keyboard(keyCode) {
   );
   return key;
 }
+function gameOver(winner)
+{
+    msg.visible = true;
+    if(winner == playerSide)
+        msg2.visible = true;
+    document.body.className = 'gray';
+}
 // function resizeStage()
 // {
 //     buttons.forEach(function(bt){bt.destroy();});
@@ -538,5 +572,9 @@ socket.on('gamestate', function(data)
         {
             gamestate = data.gamestate;
             player =  playerSide ? data.gamestate.playerRight : data.gamestate.playerLeft;
+        });
+socket.on('gameend', function(data)
+        {
+            gameOver(data.winner);
         });
 

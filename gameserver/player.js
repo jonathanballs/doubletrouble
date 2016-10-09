@@ -13,7 +13,8 @@ class Player {
             income: this.income,
             villagers: this.villagers,
             money: this.money,
-            lanes: this.lanes
+            lanes: this.lanes,
+            alive: this.alive
         }
     }
 
@@ -26,6 +27,7 @@ class Player {
         this.health = 100
         this.income = global.CONF.PLAYER_INCOME 
         this.villagers = [1,1] 
+        this.alive = true;
         this.money = global.CONF.PLAYER_START_MONEY
         this.lanes = Array(global.CONF.NUM_LANES).fill().map((_, i) => {
             return new lane(i,this.villagers[i])

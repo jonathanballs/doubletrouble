@@ -93,6 +93,8 @@ class Game {
                 if (lane.health <= 0) {
                     this.active = false
                     // kill the person here
+                    
+                    
                 }
             })
             players.forEach((player) => {
