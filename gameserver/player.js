@@ -28,7 +28,7 @@ class Player {
         this.villagers = [1,1] 
         this.money = global.CONF.PLAYER_START_MONEY
         this.lanes = Array(global.CONF.NUM_LANES).fill().map((_, i) => {
-            return new lane(i)
+            return new lane(i,this.villagers[i])
         })
     }
 
@@ -42,7 +42,7 @@ class Player {
             {
                 this.lanes[lane].addUnit(new units[type]())
             }else{
-                this.villagers[lane]++;
+                this.lanes[lane].villagers++
             }
          } else { console.log('insufficient funds') }
     }
@@ -61,7 +61,7 @@ class Player {
 
     getPaid() {
         // income per second using ticks per second
-        this.money += this.income*(this.villagers[0]+this.villagers[1]) / global.CONF.TICKS_PER_SECOND
+        this.money += this.income*(this.lanes[0].villagers+this.lanes[1].villagers) / global.CONF.TICKS_PER_SECOND
     }
 }
 

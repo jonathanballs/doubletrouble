@@ -37,11 +37,13 @@ var detectHouseCollisions = function(lanes){
             u1.moving = false
             u1.progress = 100
             calculateDamages(u1,l2)
+            console.log(lanes)
         }
         if (u2.progress + u2.speed/global.CONF.TICKS_PER_SECOND >= global.CONF.LENGTH_LANES) {
             u2.moving = false
             u2.progress = 100
             calculateDamages(u2,l1)
+            console.log(lanes)
         }
     } 
 }
