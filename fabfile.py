@@ -4,7 +4,7 @@ from fabric.contrib.project import rsync_project
 from subprocess import check_output
 
 env.user = 'ubuntu'
-env.hosts = ['doubletrouble.co']
+env.hosts = ['52.212.82.92']
 env.key_filename = 'cert.pem'
 
 def deploy():
@@ -36,6 +36,9 @@ def deploy():
 def provision():
     run('sudo apt-get install -y htop tmux nodejs-legacy npm')
     run('sudo id -u trouble &>/dev/null || (sudo useradd trouble && sudo mkdir /home/trouble/ && sudo chown trouble:trouble /home/trouble)')
+    run('sudo npm install -g pm2')
+    run('curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -')
+    run('sudo apt-get install -y nodejs')
 
 def restart():
     run('sudo service doubletrouble restart');
