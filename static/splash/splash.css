@@ -10,6 +10,19 @@ img.logo {
     padding-bottom: 2em;
 }
 
+#footer
+{
+    color:white;
+    font-size:32px;
+    position:absolute;
+    bottom:0px;
+    padding:10px;
+}
+#footer a
+{
+    color:white;
+}
+
 .formControl {
     width: 400px;
     margin:auto;
