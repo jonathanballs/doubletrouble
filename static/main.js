@@ -13,6 +13,7 @@ var stage = new PIXI.Container();
 var laneIndexSelected = 0;
 var msg;
 var msg2;
+var timer = 0;
 
 // Call this to start the game
 function start(pside)
@@ -107,15 +108,15 @@ function setup()
     // var keyR = keyboard(82);
     keyQ.press = function() {
         console.log("train Worker");
-        spawn(1,0);
+        spawn(0);
     };
     keyW.press = function() {
         console.log("train soldier");
-        spawn(1,1);
+        spawn(1);
     };
     keyE.press = function() {
         console.log("train wizard");
-        spawn(1,2);
+        spawn(2);
     };
     keyJ.press =
     keyDown.press = function() {
@@ -399,13 +400,26 @@ function gameLoop()
     laneInfo0.update();
     laneInfo1.update();
 
+    if (timer != 0)
+    {
+        timer--;
+    } 
+
     draw();
 
 }
-function spawn(pos,unit)
+function spawn(unit)
 {
-    var spawns = ['worker', 'soldier', 'wizard'];
-    socket.emit('spawn', { lane:laneIndexSelected, type:spawns[unit]});
+    if(timer == 0) 
+    {
+        var spawns = ['worker', 'soldier', 'wizard'];
+        socket.emit('spawn', { lane:laneIndexSelected, type:spawns[unit]});
+        timer == 6000;
+    }
+    else
+    {
+        console.log("Timer is currently on " + timer);
+    }
 }
 function draw()
 {
