@@ -14,6 +14,7 @@ var laneIndexSelected = 0;
 var msg;
 var msg2;
 var timer = 0;
+var spawnTime = 500;
 
 // Call this to start the game
 function start(pside)
@@ -400,25 +401,20 @@ function gameLoop()
     laneInfo0.update();
     laneInfo1.update();
 
-    if (timer != 0)
-    {
-        timer--;
-    } 
-
     draw();
 
 }
 function spawn(unit)
 {
-    if(timer == 0) 
+    if(Date.now() > timer + spawnTime) 
     {
         var spawns = ['worker', 'soldier', 'wizard'];
         socket.emit('spawn', { lane:laneIndexSelected, type:spawns[unit]});
-        timer == 6000;
+        timer = Date.now();
     }
     else
     {
-        console.log("Timer is currently on " + timer);
+        console.log("Timer still up")
     }
 }
 function draw()
