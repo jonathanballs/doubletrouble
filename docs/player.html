@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>player.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="game.html">
+                  game.js
+                </a>
+              
+                
+                <a class="source" href="lane.html">
+                  lane.js
+                </a>
+              
+                
+                <a class="source" href="manager.html">
+                  manager.js
+                </a>
+              
+                
+                <a class="source" href="player.html">
+                  player.js
+                </a>
+              
+                
+                <a class="source" href="soldier.html">
+                  soldier.js
+                </a>
+              
+                
+                <a class="source" href="unit.html">
+                  unit.js
+                </a>
+              
+                
+                <a class="source" href="unit_list.html">
+                  unit_list.js
+                </a>
+              
+                
+                <a class="source" href="wizard.html">
+                  wizard.js
+                </a>
+              
+                
+                <a class="source" href="worker.html">
+                  worker.js
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>player.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-meta">"use strict"</span>
+<span class="hljs-keyword">var</span> lane = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./lane'</span>)
+<span class="hljs-keyword">var</span> units = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./unit_list'</span>)
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Player</span> </span>{
+
+    getState() {
+        <span class="hljs-keyword">return</span> {
+            <span class="hljs-attr">gameId</span>: <span class="hljs-keyword">this</span>.gameId,
+            <span class="hljs-attr">side</span>: <span class="hljs-keyword">this</span>.side,
+            <span class="hljs-attr">name</span>: <span class="hljs-keyword">this</span>.name,
+            <span class="hljs-attr">health</span>: <span class="hljs-keyword">this</span>.health,
+            <span class="hljs-attr">income</span>: <span class="hljs-keyword">this</span>.income,
+            <span class="hljs-attr">villagers</span>: <span class="hljs-keyword">this</span>.villagers,
+            <span class="hljs-attr">money</span>: <span class="hljs-keyword">this</span>.money,
+            <span class="hljs-attr">lanes</span>: <span class="hljs-keyword">this</span>.lanes,
+            <span class="hljs-attr">alive</span>: <span class="hljs-keyword">this</span>.alive
+        }
+    }
+
+    <span class="hljs-keyword">constructor</span>(gameId, name, id, socket, side) {
+        <span class="hljs-keyword">this</span>.gameId = gameId
+        <span class="hljs-keyword">this</span>.name = name
+        <span class="hljs-keyword">this</span>.side = side
+        <span class="hljs-keyword">this</span>.id = id
+        <span class="hljs-keyword">this</span>.socket = socket
+        <span class="hljs-keyword">this</span>.health = <span class="hljs-number">100</span>
+        <span class="hljs-keyword">this</span>.income = global.CONF.PLAYER_INCOME 
+        <span class="hljs-keyword">this</span>.villagers = [<span class="hljs-number">1</span>,<span class="hljs-number">1</span>] 
+        <span class="hljs-keyword">this</span>.alive = <span class="hljs-literal">true</span>;
+        <span class="hljs-keyword">this</span>.money = global.CONF.PLAYER_START_MONEY
+        <span class="hljs-keyword">this</span>.lanes = <span class="hljs-built_in">Array</span>(global.CONF.NUM_LANES).fill().map(<span class="hljs-function">(<span class="hljs-params">_, i</span>) =&gt;</span> {
+            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> lane(i,<span class="hljs-keyword">this</span>.villagers[i])
+        })
+    }
+
+    spawnUnit(lane, type) {
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'SPAWNING '</span> + type)
+        <span class="hljs-keyword">var</span> unit = <span class="hljs-keyword">new</span> units[type]()
+        <span class="hljs-keyword">var</span> unitCost = unit.getUnitTypeCost()
+        <span class="hljs-keyword">if</span> (unitCost &lt;= <span class="hljs-keyword">this</span>.money) {
+            <span class="hljs-keyword">this</span>.money -= unitCost
+            <span class="hljs-keyword">if</span>(type != <span class="hljs-string">'worker'</span>)
+            {
+                <span class="hljs-keyword">this</span>.lanes[lane].addUnit(<span class="hljs-keyword">new</span> units[type]())
+            }<span class="hljs-keyword">else</span>{
+                <span class="hljs-keyword">this</span>.lanes[lane].villagers++
+            }
+         } <span class="hljs-keyword">else</span> { <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'insufficient funds'</span>) }
+    }
+
+    takeDamage(damage) {
+        <span class="hljs-keyword">this</span>.health -= damage
+    }
+
+    moveUnits() {
+        <span class="hljs-keyword">this</span>.lanes.forEach(<span class="hljs-function">(<span class="hljs-params">lane</span>) =&gt;</span> {
+            lane.units.forEach(<span class="hljs-function">(<span class="hljs-params">unit</span>) =&gt;</span> {
+                unit.move()
+            })
+        })
+    }
+
+    getPaid() {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>income per second using ticks per second</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>.money += <span class="hljs-keyword">this</span>.income*(<span class="hljs-keyword">this</span>.lanes[<span class="hljs-number">0</span>].villagers+<span class="hljs-keyword">this</span>.lanes[<span class="hljs-number">1</span>].villagers) / global.CONF.TICKS_PER_SECOND
+    }
+}
+
+<span class="hljs-built_in">module</span>.exports = Player;</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>soldier.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="game.html">
+                  game.js
+                </a>
+              
+                
+                <a class="source" href="lane.html">
+                  lane.js
+                </a>
+              
+                
+                <a class="source" href="manager.html">
+                  manager.js
+                </a>
+              
+                
+                <a class="source" href="player.html">
+                  player.js
+                </a>
+              
+                
+                <a class="source" href="soldier.html">
+                  soldier.js
+                </a>
+              
+                
+                <a class="source" href="unit.html">
+                  unit.js
+                </a>
+              
+                
+                <a class="source" href="unit_list.html">
+                  unit_list.js
+                </a>
+              
+                
+                <a class="source" href="wizard.html">
+                  wizard.js
+                </a>
+              
+                
+                <a class="source" href="worker.html">
+                  worker.js
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>soldier.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-meta">"use strict"</span>
+<span class="hljs-keyword">var</span> Unit = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./unit'</span>)
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Soldier</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Unit</span> </span>{
+
+    getUnitTypeSpeed() { <span class="hljs-keyword">return</span> global.CONF.SOLDIER_SPEED }
+    getUnitTypeDamage() { <span class="hljs-keyword">return</span> global.CONF.SOLDIER_DAMAGE }
+    getUnitTypeMovingStatus() { <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span> }
+    getUnitTypeStart() { <span class="hljs-keyword">return</span> global.CONF.SOLDIER_START }
+    getUnitTypeCost() { <span class="hljs-keyword">return</span> global.CONF.SOLDIER_COST }
+    getUnitTypeHealth() { <span class="hljs-keyword">return</span> global.CONF.SOLDIER_HEALTH }
+    getUnitType() { <span class="hljs-keyword">return</span> <span class="hljs-string">'soldier'</span> }
+}
+
+<span class="hljs-built_in">module</span>.exports = Soldier</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

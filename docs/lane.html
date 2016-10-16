@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>lane.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="game.html">
+                  game.js
+                </a>
+              
+                
+                <a class="source" href="lane.html">
+                  lane.js
+                </a>
+              
+                
+                <a class="source" href="manager.html">
+                  manager.js
+                </a>
+              
+                
+                <a class="source" href="player.html">
+                  player.js
+                </a>
+              
+                
+                <a class="source" href="soldier.html">
+                  soldier.js
+                </a>
+              
+                
+                <a class="source" href="unit.html">
+                  unit.js
+                </a>
+              
+                
+                <a class="source" href="unit_list.html">
+                  unit_list.js
+                </a>
+              
+                
+                <a class="source" href="wizard.html">
+                  wizard.js
+                </a>
+              
+                
+                <a class="source" href="worker.html">
+                  worker.js
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>lane.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-meta">"use strict"</span>
+<span class="hljs-keyword">var</span> _ = <span class="hljs-built_in">require</span>(<span class="hljs-string">'underscore'</span>)
+<span class="hljs-keyword">var</span> Unit = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./unit'</span>)
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Lane</span> </span>{
+
+    <span class="hljs-keyword">constructor</span>(lane_num, villagers) {
+        <span class="hljs-keyword">this</span>.num = lane_num
+        <span class="hljs-keyword">this</span>.units = []
+        <span class="hljs-keyword">this</span>.health = <span class="hljs-number">10</span>
+        <span class="hljs-keyword">this</span>.villagers = villagers 
+    }
+
+    addUnit(unit) {
+        <span class="hljs-keyword">this</span>.units.push(unit)
+    }
+
+    killUnits() {
+        <span class="hljs-keyword">this</span>.units = _.filter(<span class="hljs-keyword">this</span>.units, (unit) =&gt; { <span class="hljs-keyword">return</span> unit.health &gt; <span class="hljs-number">0</span> })
+    }
+
+    takeDamage(d) {
+        <span class="hljs-keyword">var</span> initVillagers = <span class="hljs-keyword">this</span>.villagers
+        <span class="hljs-keyword">if</span>(<span class="hljs-keyword">this</span>.villagers &gt; <span class="hljs-number">0</span>)
+        {
+            <span class="hljs-keyword">this</span>.villagers -= d
+            <span class="hljs-keyword">if</span>(<span class="hljs-keyword">this</span>.villagers &lt; <span class="hljs-number">0</span>)
+            {
+                <span class="hljs-keyword">this</span>.villagers = <span class="hljs-number">0</span>
+                <span class="hljs-keyword">this</span>.takeDamage(d - initVillagers)
+            }
+        }<span class="hljs-keyword">else</span>{
+            <span class="hljs-keyword">this</span>.health -= d
+        }
+    }
+}
+
+<span class="hljs-built_in">module</span>.exports = Lane;</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
