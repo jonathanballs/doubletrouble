@@ -44,6 +44,8 @@ function start(pside)
         .add("static/assets/main/units/wizard2.png")
         .add("static/assets/main/units/worker1.png")
         .add("static/assets/main/units/worker2.png")
+        .add("static/assets/main/units/tank1.png")
+        .add("static/assets/main/units/tank2.png")
         .add("static/assets/main/details/detail1.png")
         .add("static/assets/main/details/detail2.png")
         .add("static/assets/main/details/detail3.png")
@@ -88,6 +90,7 @@ function setup()
     hud.addUnitButton("worker", "Q", 50);
     hud.addUnitButton("soldier", "W", 25);
     hud.addUnitButton("wizard", "E", 250);
+    hud.addUnitButton("tank", "R", 125);
     hud.paint();
 
     // Create lane information
@@ -102,6 +105,7 @@ function setup()
     var keyQ = keyboard(81);
     var keyW = keyboard(87);
     var keyE = keyboard(69);
+    var keyR = keyboard(82);
     var keyJ = keyboard(74);
     var keyK = keyboard(75);
     var keyUp = keyboard(38);
@@ -118,6 +122,10 @@ function setup()
     keyE.press = function() {
         console.log("train wizard");
         spawn(2);
+    };
+    keyR.press = function() {
+        console.log("train tank");
+        spawn(3);
     };
     keyJ.press =
     keyDown.press = function() {
@@ -408,7 +416,7 @@ function spawn(unit)
 {
     if(Date.now() > timer + spawnTime) 
     {
-        var spawns = ['worker', 'soldier', 'wizard'];
+        var spawns = ['worker', 'soldier', 'wizard','tank'];
         socket.emit('spawn', { lane:laneIndexSelected, type:spawns[unit]});
         timer = Date.now();
     }

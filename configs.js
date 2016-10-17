@@ -19,5 +19,10 @@ module.exports = {
     WORKER_DAMAGE: 0,
     WORKER_START: -2,
     WORKER_COST: 50,
-    WORKER_HEALTH: 1
+    WORKER_HEALTH: 1,
+    TANK_SPEED: 3,
+    TANK_DAMAGE: 1,
+    TANK_START: 0,
+    TANK_HEALTH: 15,
+    TANK_COST: 0,
 }
