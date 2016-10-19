@@ -5,7 +5,10 @@ var player;
 var gamestate;
 var units = new Array();
 var spawn_pos = new Array();
-var hud = new Array();
+var castle;
+var hud;
+var lanes = new Array();
+
 var laneInfo1;
 var laneInfo2;
 var renderer = PIXI.autoDetectRenderer(window.innerWidth,window.innerHeight, {antialias:false, transparent:false, resolution:1});
@@ -15,6 +18,9 @@ var msg;
 var msg2;
 var timer = 0;
 var spawnTime = 500;
+
+// Constants
+var HUD_WIDTH = 168;
 
 // Call this to start the game
 function start(pside)
@@ -78,7 +84,11 @@ function setup()
     }else{
         init[0] =  window.innerWidth*0.8;
     }
-    init[1] = makeCastle(init[0]);
+
+    // Old castle height. Really gay and shit.
+    init[1] = window.innerHeight/2 - 30;
+
+    castle = new Castle();
     //make castle and assign the initial x
     makeRoads(init);    
     makeHuts(init);
@@ -216,7 +226,7 @@ class Hud {
 
     constructor() {
         this.hudPadding = 20;
-        this.hudWidth = 168; // 128 + padding
+        this.hudWidth = HUD_WIDTH;
         this.hudStartX = playerSide ? window.innerWidth - this.hudWidth : 0;
 
         // Background
@@ -293,6 +303,39 @@ class Hud {
     }
 }
 
+
+class Lane {
+    constructor() {
+        this.index = lanes.length;
+        lanes.push(index);
+    }
+}
+
+class Castle {
+    constructor() {
+        var d_from_edge = HUD_WIDTH + 100;
+        this.x = !playerSide ? d_from_edge : window.innerWidth - d_from_edge;
+        this.y = window.innerHeight / 2;
+
+        // Bottom half
+        this.castle1 = makeSprite(this.x, 0, "castle1");
+        this.castle1.anchor.set(0.5, 0.5);
+        this.castle1.y = this.y + this.castle1.height / 2;
+
+        // Top half
+        this.castle2 = makeSprite(this.x, 0, "castle2");
+        this.castle2.anchor.set(0.5, 0.5);
+        this.castle2.y = this.y - this.castle2.height / 2;
+
+        // Names
+        var playername = player.name ? player.name : "The Biene";
+        this.nameText = new PIXI.Text(playername, {font:"20px sans-serif", fill:"black"});
+        this.nameText.x = this.x - this.nameText.width / 2;
+        this.nameText.y = this.castle2.y - this.castle2.height / 2;
+        stage.addChild(this.nameText);
+    }
+}
+
 function makeSprite(x, y, sprite)
 {
     var tmp = new PIXI.Sprite(PIXI.loader.resources["static/assets/main/"+sprite+".png"].texture);
@@ -301,6 +344,7 @@ function makeSprite(x, y, sprite)
     stage.addChild(tmp);
     return tmp;
 }
+
 function makeHuts(init)
 {
     var huts = new Array();
@@ -321,6 +365,7 @@ function makeHuts(init)
         spawn_pos[3] = huts[1].y - 43; 
     }
 }
+
 function makeRoads(init)
 {
     var roads = new Array();
@@ -351,37 +396,11 @@ function makeRoads(init)
         }
     }
 }
+
 function makeCastle(xInit)
 {
     var center = window.innerHeight/2;
-    var castle = new Array(2);
-    castle[0] = new PIXI.Sprite(PIXI.loader.resources["static/assets/main/castle1.png"].texture);
-    castle[0].y = center + (castle[0].height/2) - 64;
-    if(playerSide ==0)
-    {
-        castle[0].x = xInit + 5; 
-    }else{
-        castle[0].x = xInit - 128 -5; 
-    }
-    castle[1] = new PIXI.Sprite(PIXI.loader.resources["static/assets/main/castle2.png"].texture);
-    castle[1].y = castle[0].y - castle[1].height; 
-    if(playerSide == 0)
-    {
-        castle[1].x = xInit + 5 ;
-    }else{
-        castle[1].x = xInit - 128 -5;
-    }
-    var name = new PIXI.Text(player.name,{font:"20px sans-serif", fill:"black"});
-    if(player.name == "")
-        name.text = "The Biene";
-    name.anchor.set(0.5,0.5);
-    name.x = castle[1].x + 64;
-    name.y = castle[1].y + 32;
-    
-    stage.addChild(name);
-    stage.addChild(castle[0]);
-    stage.addChild(castle[1]);
-    return castle[0].y - 30;   
+    return center - 30;
 }
 
 //GAME LOOP GOODNESS
@@ -404,6 +423,7 @@ function gameLoop()
     draw();
 
 }
+
 function spawn(unit)
 {
     if(Date.now() > timer + spawnTime) 
@@ -417,6 +437,7 @@ function spawn(unit)
         console.log("Timer still up")
     }
 }
+
 function draw()
 {
     if(playerSide == 0)
@@ -513,6 +534,7 @@ function draw()
             })
 
 }
+
 function keyboard(keyCode) {
   var key = {};
   key.code = keyCode;
@@ -549,6 +571,7 @@ function keyboard(keyCode) {
   );
   return key;
 }
+
 function gameOver(winner)
 {
     msg.visible = true;
@@ -556,34 +579,14 @@ function gameOver(winner)
         msg2.visible = true;
     document.body.className = 'gray';
 }
-// function resizeStage()
-// {
-//     buttons.forEach(function(bt){bt.destroy();});
-//     var init = new Array();
-//     if (player == 0)
-//     {
-//         init[0] =  window.innerWidth*0.2;
-//     }else{
-//         init[0] =  window.innerWidth*0.8;
-//     }
-//     init[1] = makeCastle(init[0]);
-//     //make castle and assign the initial x
-//     makeRoads(init);    
-//     makeHuts(init);
-//     // (); 
-//     // makeButtons();
-
-//     buttons.forEach(function(item){stage.addChild(item)});
-// }
 
 //Socket.io stuff
-socket.on('gamestate', function(data)
-        {
-            gamestate = data.gamestate;
-            player =  playerSide ? data.gamestate.playerRight : data.gamestate.playerLeft;
-        });
-socket.on('gameend', function(data)
-        {
-            gameOver(data.winner);
-        });
+socket.on('gamestate', function(data) {
+    gamestate = data.gamestate;
+    player =  playerSide ? data.gamestate.playerRight : data.gamestate.playerLeft;
+});
+
+socket.on('gameend', function(data) {
+    gameOver(data.winner);
+});
 
