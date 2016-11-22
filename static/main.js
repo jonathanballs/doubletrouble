@@ -82,7 +82,7 @@ function setup()
     }
     init[1] = makeCastle(init[0]);
     //make castle and assign the initial x
-    makeRoads(init);    
+    makeRoads(init);
     makeHuts(init);
 
     // Create Hud
@@ -101,7 +101,7 @@ function setup()
 
     //render
     renderer.render(stage);
-    //Keyboard handling 
+    //Keyboard handling
     var keyQ = keyboard(81);
     var keyW = keyboard(87);
     var keyE = keyboard(69);
@@ -315,18 +315,18 @@ function makeHuts(init)
     if(playerSide == 0)
     {
         huts.push(makeSprite(init[0]+256+32,init[1]-256+32,"house"));
-        spawn_pos[0] = huts[0].x; 
-        spawn_pos[1] = huts[0].y - 43; 
+        spawn_pos[0] = huts[0].x;
+        spawn_pos[1] = huts[0].y - 43;
         huts.push(makeSprite(init[0]+256+32,init[1]+256+32,"house"));
-        spawn_pos[2] = huts[1].x; 
-        spawn_pos[3] = huts[1].y - 43; 
+        spawn_pos[2] = huts[1].x;
+        spawn_pos[3] = huts[1].y - 43;
     }else{
         huts.push(makeSprite(init[0]-384+32,init[1]-256+32,"house"));
-        spawn_pos[0] = huts[0].x - 30; 
-        spawn_pos[1] = huts[0].y - 43; 
+        spawn_pos[0] = huts[0].x - 30;
+        spawn_pos[1] = huts[0].y - 43;
         huts.push(makeSprite(init[0]-384+32,init[1]+256+32,"house"));
-        spawn_pos[2] = huts[1].x - 30; 
-        spawn_pos[3] = huts[1].y - 43; 
+        spawn_pos[2] = huts[1].x - 30;
+        spawn_pos[3] = huts[1].y - 43;
     }
 }
 function makeRoads(init)
@@ -367,12 +367,12 @@ function makeCastle(xInit)
     castle[0].y = center + (castle[0].height/2) - 64;
     if(playerSide ==0)
     {
-        castle[0].x = xInit + 5; 
+        castle[0].x = xInit + 5;
     }else{
-        castle[0].x = xInit - 128 -5; 
+        castle[0].x = xInit - 128 -5;
     }
     castle[1] = new PIXI.Sprite(PIXI.loader.resources["static/assets/main/castle2.png"].texture);
-    castle[1].y = castle[0].y - castle[1].height; 
+    castle[1].y = castle[0].y - castle[1].height;
     if(playerSide == 0)
     {
         castle[1].x = xInit + 5 ;
@@ -385,11 +385,11 @@ function makeCastle(xInit)
     name.anchor.set(0.5,0.5);
     name.x = castle[1].x + 64;
     name.y = castle[1].y + 32;
-    
+
     stage.addChild(name);
     stage.addChild(castle[0]);
     stage.addChild(castle[1]);
-    return castle[0].y - 30;   
+    return castle[0].y - 30;
 }
 
 //GAME LOOP GOODNESS
@@ -398,8 +398,8 @@ function gameLoop()
     requestAnimationFrame(gameLoop);
     renderer.render(stage);
     //destroying units offscreen
-    units.forEach(function(unit) { if(unit.x > innerWidth +128) 
-        { 
+    units.forEach(function(unit) { if(unit.x > innerWidth +128)
+        {
             units.splice(units.indexOf(unit),1);
             stage.removeChild(unit);
             console.log("unit destroyed in order to free memory");
@@ -414,7 +414,7 @@ function gameLoop()
 }
 function spawn(unit)
 {
-    if(Date.now() > timer + spawnTime) 
+    if(Date.now() > timer + spawnTime)
     {
         var spawns = ['worker', 'soldier', 'wizard','tank'];
         socket.emit('spawn', { lane:laneIndexSelected, type:spawns[unit]});
@@ -576,9 +576,9 @@ function gameOver(winner)
 //     }
 //     init[1] = makeCastle(init[0]);
 //     //make castle and assign the initial x
-//     makeRoads(init);    
+//     makeRoads(init);
 //     makeHuts(init);
-//     // (); 
+//     // ();
 //     // makeButtons();
 
 //     buttons.forEach(function(item){stage.addChild(item)});
@@ -594,4 +594,3 @@ socket.on('gameend', function(data)
         {
             gameOver(data.winner);
         });
-
