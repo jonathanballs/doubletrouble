@@ -1,6 +1,5 @@
 "use strict";
 
-require('dotenv').config()
 global.CONF = require('./configs')
 console.log(global.CONF)
 console.log("Double Trouble v0.0.1 running");
