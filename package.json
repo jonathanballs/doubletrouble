@@ -16,12 +16,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bonniejools/doubletrouble.git"
+    "url": "git+https://github.com/jonathanballs/doubletrouble.git"
   },
   "author": "Pedro Santos Mendonca, Jonathan Balls",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/bonniejools/doubletrouble/issues"
+    "url": "https://github.com/jonathanballs/doubletrouble/issues"
   },
-  "homepage": "https://github.com/bonniejools/doubletrouble#readme"
+  "homepage": "https://github.com/jonathanballs/doubletrouble#readme"
 }
